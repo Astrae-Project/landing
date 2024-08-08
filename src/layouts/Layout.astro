@@ -1,0 +1,70 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title> Astrae | Portal de inversión en Startups </title> 
+	</head>
+	<body>
+        <section class="contenedor-navegador">
+            <nav>
+                <a href="#" id="menu"> <img src="Imagenes/Navbar/Menú.svg"> </a>
+                <a href="index.html" id="logo"><img src="Imagenes/Navbar/Logo.svg"></a>
+                <a href="inicio-sesion.html" id="usuario"> <img src="Imagenes/Navbar/Inversor.svg"> </a>
+            </nav>
+        </section>
+	</body>
+</html>
+<style is:global>
+    body{
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        background-color: #090912;
+        color: #fff;
+        font-family: "Inter", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 500;
+        font-style: normal;
+        overflow-x: hidden;
+    }
+    .contenedor-navegador {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: auto;
+    height: auto;
+    padding: 1.5rem 0px;
+    }
+    
+    a#menu, a#inversor {
+        width: 19px;
+        height: 19px;
+    }
+
+    a#menu {
+        margin-right: 23px;
+    }
+
+    a#logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    a#usuario {
+        margin-left: 15px;
+        margin-right: 10px;
+    }
+</style>
