@@ -23,6 +23,7 @@ const { title } = Astro.props;
                 <a href="inicio-sesion.html" id="usuario"> <img src="Imagenes/Navbar/Inversor.svg"> </a>
             </nav>
         </section>
+        
 	</body>
 </html>
 <style is:global>
@@ -39,6 +40,31 @@ const { title } = Astro.props;
         font-style: normal;
         overflow-x: hidden;
     }
+    
+    nav {
+        width: 662px;
+        height: 49px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+        position: fixed;
+        top: 65px;
+        z-index: 1000;
+        border-radius: 10px;
+        backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px; 
+
+    }
+
+    @media (max-width: 768px) {
+        nav {
+            width: 87%;
+            height: 49px;
+            padding-left: 23px;
+        }
+    }
+
     .contenedor-navegador {
     display: flex;
     justify-content: center;
@@ -47,7 +73,7 @@ const { title } = Astro.props;
     height: auto;
     padding: 1.5rem 0px;
     }
-    
+        
     a#menu, a#inversor {
         width: 19px;
         height: 19px;
