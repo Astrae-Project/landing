@@ -18,12 +18,11 @@ const { title } = Astro.props;
 	<body>
         <section class="contenedor-navegador">
             <nav>
-                <a href="#" id="menu"> <img src="Imagenes/Navbar/Menú.svg"> </a>
-                <a href="index.astro" id="logo"><img src="Imagenes/Navbar/Logo.svg"></a>
-                <a href="inicio-sesion.astro" id="usuario"> <img src="Imagenes/Navbar/Inversor.svg"> </a>
+                <a href="#" id="menu"><img src="Imagenes/Navbar/Menú.svg" hidden></a>
+                <a href="/index.html" id="logo"><img src="Imagenes/Navbar/Logo.svg"></a>
+                <a href="/inicio-sesion" id="usuario"> <img src="Imagenes/Navbar/Inversor.svg"> </a>
             </nav>
         </section>
-        
 	</body>
 </html>
 <style is:global>
@@ -49,7 +48,7 @@ const { title } = Astro.props;
         top: 65px;
         z-index: 1000;
         border-radius: 10px;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(8px);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -74,7 +73,7 @@ const { title } = Astro.props;
     padding: 1.5rem 0px;
     }
         
-    a#menu, a#inversor {
+    a#menu, a#usuario {
         width: 19px;
         height: 19px;
     }
@@ -92,5 +91,19 @@ const { title } = Astro.props;
     a#usuario {
         margin-left: 15px;
         margin-right: 10px;
+        margin-top: -3px;
     }
 </style>
+
+<script>
+    document.getElementById('logo').addEventListener('click', function(event) {
+        // Verifica si estás en index.html
+        if (window.location.pathname === '/index.html') {
+            event.preventDefault(); // Evita la navegación inmediata
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    });
+</script>
