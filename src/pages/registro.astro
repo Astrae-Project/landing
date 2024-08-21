@@ -1,0 +1,180 @@
+---
+import Layout from '../layouts/Layout-registro.astro';
+---
+
+<Layout title="Plantilla">
+    <body>
+        <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
+        <img id="fondo" src="Imagenes/Registro/Fondo.svg">
+        <div id="blur"></div>
+        <a id="cerrar" href="index.astro"><img id="x" src="Imagenes/Registro/x.svg"></a>
+        <header>
+            <h1>Bienvenido a Astrae</h1>
+            <p id="subtexto-principal">Gracias por confiar en Astrae. Para comenzar a disfrutar<br> de todas nuestras funciones, configuremos su cuenta.
+            </p>
+        </header>
+        <form>
+            <input type="email" placeholder="Introduce email" required>
+            <input type="text" placeholder="Contraseña" required hidden> 
+            <button type="submit"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+        </form>
+        <button id="iniciar"><img id="google" src="Imagenes/Registro/Inicia sesion con google.svg"></button>
+        <p class="texto-abajo"><span id="regular">Al registrarse, está aceptando nuestros</span><a href="#" id="texto-abajo">Terminos y Servicios </a></p>
+    </body>
+</Layout>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+    img#estrellas{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+
+    img#fondo{
+        position: absolute;
+        align-self: center;
+        width: 100%;
+        height: 80%;
+        z-index: -2;
+    }
+
+    div#blur{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-color: #0909127c;
+        backdrop-filter: blur(20px);
+    }
+
+    a#cerrar{
+        position: absolute;
+        left: 60px;
+        top: 60px;
+        z-index: 4;
+    }
+
+    h1{
+        position: relative;
+        text-align: center;
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        background: linear-gradient(150deg, #FFFFFF 0%, #fff 30%, #6B6B71 70%);
+        -webkit-background-clip: text;
+        color: transparent;
+        background-clip: text;
+        margin-top: 275px;
+    }
+
+    p#subtexto-principal{
+        position: relative;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+        text-align: center;
+        color: #7E7E98;
+        margin-top: -12px;
+        margin-bottom: 22px;
+        z-index: 4;
+    }
+
+    form{
+        position: relative;
+        width: 320px;
+        height: 44px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 0.5px solid rgba(255, 255, 255, 0.08);
+        box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 1px inset;
+        backdrop-filter: blur(2px);
+        border-radius: 92px;
+        line-height: 19px;
+        padding-left: 21px;
+        display: flex;
+        cursor: text;
+        align-self: center;
+        z-index: 4;
+    }
+
+    input{
+        line-height: 19px;
+        width: 100%;
+        padding: 0px 8px 1px 0px;
+        color: rgb(255, 255, 255);
+        transition: color 0.3s;
+        border: none;
+        background: transparent;
+        color: rgb(255, 255, 255);
+        caret-color: rgb(71, 159, 250);
+        max-width: 100%;
+    }
+
+    input:focus {
+        outline: none;
+    }
+
+    button{
+        background-color: transparent;
+        border: none;
+        position: absolute;
+        display: flex;
+        align-self: center;
+        width: 25px;
+        height: 25px;
+        right: 9px;
+        z-index: 5;
+        border-radius: 50px;
+        cursor: pointer;
+    }
+
+    img#flecha{
+        position: relative;
+        align-self: center;
+        width: 25px;
+        height: 25px;
+        right: 7px;
+    }
+
+    button#iniciar{
+        position: relative;
+        width: 190px;
+        height: 20.57px;
+        align-self: center;
+        margin-top: 27px;
+    }
+
+    img#google{
+        width: 190px;
+    }
+
+    .texto-abajo{
+        margin-top: 300px;
+        text-align: center;
+        position: relative;
+        font-size: 13px;
+    }
+
+    span#regular{
+        color: #B0B0B0;
+        font-weight: 300;
+        margin-right: 8px;
+    }
+
+    a#texto-abajo{
+        position: relative;
+        font-size: 13px;
+        font-weight: 400;
+        bottom: 0;
+        align-self: center;
+        text-decoration: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    a#texto-abajo:hover{
+        text-decoration: underline;
+    }    
+</style>

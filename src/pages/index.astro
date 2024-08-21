@@ -15,8 +15,8 @@ import Layout from '../layouts/Layout.astro';
         </header>
 
         <div class="botones">
-            <a href="inicio-sesion.html"><button id="inicia-sesion">Inicia Sesión</button></a>
-            <a href="registro.html"><button id="registrate">Regístrate</button></a>
+            <a href="/src/pages/inicio-sesion"><button id="inicia-sesion">Inicia Sesión</button></a>
+            <a href="/src/pages/registro"><button id="registrate">Regístrate</button></a>
         </div>
 
         <div>
@@ -432,18 +432,18 @@ import Layout from '../layouts/Layout.astro';
             <div class="footer-column" id="columna-medio">
                 <h4>Menú</h4>
               <ul>
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="funcionalidades.html">Funcionalidades</a></li>
-                <li><a href="como-funciona.html">Cómo Funciona</a></li>
-                <li><a href="blog.html">Blog</a></li>
+                <li><a href="index.astro">Inicio</a></li>
+                <li><a href="funcionalidades.astro">Funcionalidades</a></li>
+                <li><a href="como-funciona.astro">Cómo Funciona</a></li>
+                <li><a href="blog.astro">Blog</a></li>
               </ul>
             </div>
             <div class="footer-column">
                 <h4>Ayuda y Soporte</h4>
               <ul>
-                <li><a href="centro-de-ayuda.html">Centro de Ayuda</a></li>
-                <li><a href="terminos.html">Términos y Condiciones</a></li>
-                <li><a href="privacidad.html">Política de Privacidad</a></li>
+                <li><a href="centro-de-ayuda.astro">Centro de Ayuda</a></li>
+                <li><a href="terminos.astro">Términos y Condiciones</a></li>
+                <li><a href="privacidad.astro">Política de Privacidad</a></li>
               </ul>
             </div>
             <div class="footer-column-social">
@@ -463,12 +463,16 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </footer>      
     </body>
-</Layout>
 
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,0..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Alata&family=Inter&display=swap');
+
+
+img#fondo{
+    z-index: -1;
+}
 
 h1{
     font-size: 65px;

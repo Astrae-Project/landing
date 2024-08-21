@@ -1,0 +1,29 @@
+<svg width="403" height="179" viewBox="0 0 403 179" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse opacity="0.6" cx="201.461" cy="89.5759" rx="200.776" ry="88.9867" fill="url(#paint0_radial_559_184)"/>
+<path d="M42.7578 104.589V87.991" stroke="#696969" stroke-opacity="0.8" stroke-width="11" stroke-linecap="round"/>
+<path d="M61.2217 75.8191L61.2217 47.0495" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M61.2217 75.8191L61.2217 47.0495" stroke="black" stroke-opacity="0.2" stroke-width="11" stroke-linecap="round"/>
+<path d="M151.373 75.8191V47.0495" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M259.989 75.8191V62.5408" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M295.833 75.8191V54.7951" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M332.22 75.8191V48.156" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M79.1436 75.8191V68.0734" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M97.6083 75.8191V58.1147" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M114.987 75.9167V73.5318" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M133.451 102.376V87.9909" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M169.838 102.376V87.9909" stroke="#696969" stroke-opacity="0.8" stroke-width="11" stroke-linecap="round"/>
+<path d="M187.76 102.376V87.9909" stroke="#696969" stroke-opacity="0.8" stroke-width="11" stroke-linecap="round"/>
+<path d="M206.225 102.376V87.9909" stroke="#696969" stroke-opacity="0.8" stroke-width="11" stroke-linecap="round"/>
+<path d="M223.604 87.991H223.603" stroke="#696969" stroke-opacity="0.8" stroke-width="11" stroke-linecap="round"/>
+<path d="M278.454 75.8191H278.454" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M351.227 75.8191H351.226" stroke="#806FE8" stroke-width="11" stroke-linecap="round"/>
+<path d="M242.068 103.482V89.0976" stroke="#696969" stroke-opacity="0.8" stroke-width="11" stroke-linecap="round"/>
+<path d="M314.298 102.376V87.9909" stroke="#696969" stroke-opacity="0.8" stroke-width="11" stroke-linecap="round"/>
+<defs>
+<radialGradient id="paint0_radial_559_184" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(202.017 95.6937) rotate(90.3845) scale(82.8708 186.977)">
+<stop stop-color="#44336B"/>
+<stop offset="0.823452" stop-color="#100F1D"/>
+<stop offset="1" stop-color="#100F1D"/>
+</radialGradient>
+</defs>
+</svg>
