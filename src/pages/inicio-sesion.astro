@@ -12,7 +12,7 @@ import Layout from '../layouts/Layout-registro.astro';
             <h1>Entra en Astrae</h1>
             <p id="subtexto-principal">Si ya has accedido a Astrae, puedes entrar con <br>tu email o iniciando sesión con tu cuenta de Google</p>
         </header>
-        <form id="form">
+        <form id="loginForm">
             <input id="email" type="email" placeholder="Introduce email" required>
             <div id="password-container" style="display: none;">
                 <input id="password" type="password" placeholder="Contraseña" required> 
@@ -205,3 +205,31 @@ import Layout from '../layouts/Layout-registro.astro';
         text-decoration: underline;
     }
 </style>
+
+<script>
+import { enviarDatos } from "./auth";
+
+    // Manejar el envío del formulario de inicio de sesión
+const loginForm = document.getElementById('loginForm');
+loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    const data = { email, password };
+
+    // Enviar los datos al backend
+    const result = await enviarDatos('login', data);
+
+    if (result && result.token) {
+        // Almacena el token JWT en el almacenamiento local
+        localStorage.setItem('token', result.token);
+        // Redirigir al usuario a la app
+        window.location.href = 'http://localhost:3000/';
+    } else {
+        alert('Error en el inicio de sesión');
+    }
+});
+
+</script>
