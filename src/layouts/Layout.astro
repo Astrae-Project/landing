@@ -1,109 +1,253 @@
 ---
+// Importante: Asegúrate de que el componente tenga las props correctas
 interface Props {
-	title: string;
+  title: string;
 }
 
 const { title } = Astro.props;
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content="Astro description" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <title> Astrae | Portal de inversión en Startups </title> 
-	</head>
-	<body>
-        <section class="contenedor-navegador">
-            <nav>
-                <a href="#" id="menu"><img src="Imagenes/Navbar/Menú.svg" hidden></a>
-                <a href="/index.html" id="logo"><img src="Imagenes/Navbar/Logo.svg"></a>
-                <a href="/inicio-sesion" id="usuario"> <img src="Imagenes/Navbar/Inversor.svg"> </a>
-            </nav>
-        </section>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title> Astrae | Portal de inversión en Startups </title>
+  </head>
+  <body>
+    <section class="contenedor-navegador">
+      <nav>
+        <button id="menu">
+          <img id="imagen-menu" src="Imagenes/Navbar/Menú.svg" alt="Menu" />
+        </button>
+        <a href="/index.html" id="logo">
+          <img src="Imagenes/Navbar/Logo.svg" alt="Logo" />
+        </a>
+        <a href="/inicio-sesion" id="usuario">
+          <img src="Imagenes/Navbar/Inversor.svg" alt="Usuario" />
+        </a>
+      </nav>
+    </section>
+    <div id="menu-desplegable" hidden>
+        <ul>
+          <li><img src="Imagenes/Navbar/Herramienta.svg"><a href="/funcionalidades">Funcionalidades</a></li>
+          <li><img src="Imagenes/Navbar/Pregunta.svg"><a href="/como-funciona">Cómo Funciona</a></li>
+          <li><img src="Imagenes/Navbar/Ventaja.svg"><a href="/ventajas">Ventajas</a></li>
+          <li><img src="Imagenes/Navbar/Actualizaciones.svg"><a href="/actualizaciones">Actualizaciones</a></li>
+        </ul>
+    </div>
+  </body>
 </html>
+
 <style is:global>
-    body{
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        background-color: #090912;
-        color: #fff;
-        font-family: "Inter", sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 500;
-        font-style: normal;
-        overflow-x: hidden;
-    }
-    
+  body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #090912;
+    color: #fff;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    overflow-x: hidden;
+  }
+
+  nav {
+    width: 662px;
+    height: 49px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.05)
+    );
+    position: fixed;
+    top: 65px;
+    z-index: 1000;
+    border-radius: 10px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  @media (max-width: 768px) {
     nav {
-        width: 662px;
-        height: 49px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
-        position: fixed;
-        top: 65px;
-        z-index: 1000;
-        border-radius: 10px;
-        backdrop-filter: blur(8px);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 20px; 
-
+      width: 87%;
+      height: 49px;
+      padding-left: 23px;
     }
+  }
 
-    @media (max-width: 768px) {
-        nav {
-            width: 87%;
-            height: 49px;
-            padding-left: 23px;
-        }
-    }
-
-    .contenedor-navegador {
+  .contenedor-navegador {
     display: flex;
     justify-content: center;
     align-items: center;
     width: auto;
     height: auto;
     padding: 1.5rem 0px;
-    }
-        
-    a#menu, a#usuario {
-        width: 19px;
-        height: 19px;
-    }
+  }
 
-    a#menu {
-        margin-right: 23px;
-    }
+  button#menu,
+  a#usuario {
+    width: 19px;
+    height: 19px;
+  }
 
-    a#logo {
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+  button#menu {
+    width: 19px;
+    height: 19px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-top: 4px;
+  }
 
-    a#usuario {
-        margin-left: 15px;
-        margin-right: 10px;
-        margin-top: -3px;
+  img#imagen-menu {
+    position: relative;
+    left: -8px;
+    top: -3px;
+  }
+
+  a#logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  a#usuario {
+    margin-left: 15px;
+    margin-right: 10px;
+    margin-top: -3px;
+  }
+
+  #menu-desplegable {
+    width: 20%;
+    height: 25%;
+    left: 425px;
+    top: 130px;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.15),
+      rgba(255, 255, 255, 0.05)
+    );
+    position: fixed;
+    z-index: 999;
+    border-radius: 10px;
+    backdrop-filter: blur(17px);
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 18px;
+  }
+
+  #menu-desplegable ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 17px;
+  }
+
+  #menu-desplegable li {
+    margin-top: 6px; /* Reducir el margen superior */
+    display: flex;
+    align-items: center;
+    padding: 10px 10px;
+    padding-right: 80%; /* Aumentar el relleno (padding) para que el rectángulo sea más grande */
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+    width: calc(100% - 4px); /* Ajustar el ancho para que ocupe casi todo el contenedor */
+}
+
+  #menu-desplegable li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  #menu-desplegable a {
+    color: #e9e9e9;
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 14px;
+  }
+
+
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
     }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
 </style>
 
 <script>
-    document.getElementById('logo').addEventListener('click', function(event) {
-        // Verifica si estás en index.html
-        if (window.location.pathname === '/index.html') {
-            event.preventDefault(); // Evita la navegación inmediata
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuButton = document.getElementById("menu");
+    const menu = document.getElementById("menu-desplegable");
+
+    menuButton.addEventListener("click", function () {
+      if (menu.hasAttribute("hidden")) {
+        menu.style.display = "block"; // Mostrar el menú
+        menu.style.pointerEvents = "auto"; // Permitir interacción
+        menu.removeAttribute("hidden");
+        menu.style.animation = "slideIn 0.3s forwards";
+      } else {
+        menu.style.pointerEvents = "none"; // Desactivar interacción
+        menu.style.animation = "slideOut 0.3s forwards";
+        menu.addEventListener(
+          "animationend",
+          function () {
+            menu.style.display = "none"; // Ocultar completamente
+            menu.setAttribute("hidden", true);
+          },
+          { once: true }
+        );
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+            if (!menu.hasAttribute("hidden")) {
+                menu.style.animation = "slideOut 0.3s forwards";
+                menu.addEventListener(
+                    "animationend",
+                    function () {
+                        menu.setAttribute("hidden", true);
+                    },
+                    { once: true }
+                );
+            }
         }
     });
+
+    document.getElementById("logo").addEventListener("click", function (event) {
+      if (window.location.pathname === "/index.html") {
+        event.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }
+    });
+  });
 </script>

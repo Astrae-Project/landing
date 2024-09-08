@@ -9,7 +9,7 @@ import Layout from '../layouts/Layout-registro.astro';
         <div id="blur"></div>
         <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
         <header>
-            <h1>Entra en Astrae</h1>
+            <h1>Bienvenido a Astrae</h1>
             <p id="subtexto-principal">Abre un mundo de grandes oportunidades entrando con <br>tu email o iniciando sesión con tu cuenta de Google</p>
         </header>
         <form id="form">
@@ -23,7 +23,7 @@ import Layout from '../layouts/Layout-registro.astro';
             <button id="submit-btn" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
         </form>
         <button id="iniciar" type="button"><img id="google" src="Imagenes/Registro/Inicia sesion con google.svg"></button>
-        <p class="texto-abajo"><span id="regular">¿No tienes cuenta todavía?</span><a href="/registro" id="texto-abajo">Regístrate</a></p>
+        <p class="texto-abajo"><span id="regular">Si ya te has registrado previamente,</span><a href="/inicio-sesion" id="texto-abajo">Inicia Sesión</a></p>
     </body>
 </Layout>
 
@@ -83,10 +83,10 @@ import Layout from '../layouts/Layout-registro.astro';
         position: relative;
         font-size: 14px;
         font-weight: 400;
-        line-height: 20px;
+        line-height: 24px;
         text-align: center;
         color: #9292ad;
-        margin-top: -12px;
+        margin-top: -20px;
         margin-bottom: 22px;
     }
 
@@ -128,9 +128,7 @@ import Layout from '../layouts/Layout-registro.astro';
 
     div#password-container {
         position: relative;
-        display: flex;
         width: inherit;
-        align-items: center;
     }
 
     span#toggle-password {

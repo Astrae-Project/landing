@@ -10,12 +10,10 @@ import Layout from '../layouts/Layout-registro.astro';
         <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
         <header>
             <h1>Entra en Astrae</h1>
-            <p id="subtexto-principal">Abre un mundo de grandes oportunidades entrando con <br>tu email o iniciando sesión con tu cuenta de Google</p>
+            <p id="subtexto-principal">Si ya has accedido a Astrae, puedes entrar con <br>tu email o iniciando sesión con tu cuenta de Google</p>
         </header>
         <form id="form">
-            <div id="email-container">
-                <input id="email" type="email" placeholder="Introduce email" required>
-            </div>
+            <input id="email" type="email" placeholder="Introduce email" required>
             <div id="password-container" style="display: none;">
                 <input id="password" type="password" placeholder="Contraseña" required> 
                 <span id="toggle-password" style="cursor: pointer;">
@@ -85,13 +83,13 @@ import Layout from '../layouts/Layout-registro.astro';
         position: relative;
         font-size: 14px;
         font-weight: 400;
-        line-height: 20px;
+        line-height: 24px;
         text-align: center;
-        color: #7E7E98;
-        margin-top: -12px;
+        color: #9292ad;
+        margin-top: -20px;
         margin-bottom: 22px;
     }
-
+    
     form{
         position: relative;
         width: 320px;
@@ -128,11 +126,9 @@ import Layout from '../layouts/Layout-registro.astro';
         outline: none;
     }
 
-    div#password-container, div#email-container {
+    div#password-container {
         position: relative;
-        display: flex;
         width: inherit;
-        align-items: center;
     }
 
     span#toggle-password {
@@ -146,6 +142,7 @@ import Layout from '../layouts/Layout-registro.astro';
         width: 16px;
         height: 16px;
     }
+
     button{
         background-color: transparent;
         border: none;
@@ -208,6 +205,3 @@ import Layout from '../layouts/Layout-registro.astro';
         text-decoration: underline;
     }
 </style>
-
-
-  
