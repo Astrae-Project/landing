@@ -207,29 +207,34 @@ import Layout from '../layouts/Layout-registro.astro';
 </style>
 
 <script>
-import { enviarDatos } from "./auth";
-
-    // Manejar el envío del formulario de inicio de sesión
-const loginForm = document.getElementById('loginForm');
-loginForm.addEventListener('submit', async (event) => {
+document.getElementById('loginForm').addEventListener('submit', async function (event) {
     event.preventDefault();
 
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
 
-    const data = { email, password };
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/iniciar-sesion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
 
-    // Enviar los datos al backend
-    const result = await enviarDatos('login', data);
+      const data = await response.json();
 
-    if (result && result.token) {
-        // Almacena el token JWT en el almacenamiento local
-        localStorage.setItem('token', result.token);
-        // Redirigir al usuario a la app
-        window.location.href = 'http://localhost:3000/';
-    } else {
-        alert('Error en el inicio de sesión');
+      if (response.ok) {
+        // Guardar token en cookies
+        document.cookie = `token=${data.token}; path=/; secure; HttpOnly`;
+        alert('Inicio de sesión exitoso');
+        window.location.href = 'http://localhost:3000'; // Redirigir al dashboard
+      } else {
+        alert(data.error || 'Error en el inicio de sesión');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al conectarse al servidor');
     }
-});
-
+  });
 </script>
