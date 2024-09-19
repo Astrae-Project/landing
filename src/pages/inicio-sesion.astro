@@ -1,5 +1,5 @@
----
-import Layout from '../layouts/Layout-registro.astro';
+--- 
+import Layout from '../layouts/Layout-registro.astro'; 
 ---
 
 <Layout title="Plantilla">
@@ -20,12 +20,77 @@ import Layout from '../layouts/Layout-registro.astro';
                     <img id="eye-icon" src="Imagenes/Registro/Ojo cerrado.png" alt="Mostrar/Ocultar Contraseña">
                 </span>
             </div>            
-            <button id="submit-btn" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+            <button id="submit-btn" type="submit"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
         </form>
         <button id="iniciar" type="button"><img id="google" src="Imagenes/Registro/Inicia sesion con google.svg"></button>
         <p class="texto-abajo"><span id="regular">¿No tienes cuenta todavía?</span><a href="/registro" id="texto-abajo">Regístrate</a></p>
     </body>
+    <script>
+        import axios from 'axios';
+    
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordContainer = document.getElementById('password-container');
+        const passwordInput = document.getElementById('password');
+    
+        // Función para manejar el formulario de inicio de sesión
+        loginForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+    
+            const email = emailInput.value;
+            
+            // Verificar si el campo de contraseña está visible
+            if (passwordContainer.style.display === 'none') {
+                // Validar que se haya ingresado un email
+                if (!email) {
+                    alert('Por favor, introduce un email válido');
+                    return;
+                }
+                
+                // Mostrar el campo de la contraseña
+                passwordContainer.style.display = 'block';
+                return;
+            }
+        
+            // Obtener la contraseña
+            const password = passwordInput.value;
+        
+            // Validar que se haya ingresado una contraseña
+            if (!password) {
+                alert('Por favor, introduce una contraseña');
+                return;
+            }
+    
+            try {
+                const response = await axios.post('http://localhost:5000/api/auth/iniciar-sesion', {
+                    email,
+                    password
+                });
+    
+                // Verifica el contenido de la respuesta
+                console.log('Response data:', response.data);
+    
+                if (response.status === 200) {
+                    // Guardar token en cookies
+                    document.cookie = `token=${response.data.token}; path=/; ${process.env.NODE_ENV === 'production' ? 'secure; ' : ''}HttpOnly`;
+    
+                    // Configurar y almacenar el refresh token en la cookie
+                    document.cookie = `refreshToken=${response.data.refreshToken}; path=/; ${process.env.NODE_ENV === 'production' ? 'secure; ' : ''}HttpOnly`;
+    
+                    window.location.href = 'http://localhost:3000/'; // Redirigir al dashboard
+                } 
+                else {
+                    alert(response.data.message || 'Error en el inicio de sesión');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al conectarse al servidor');
+            }
+        });
+    </script>
 </Layout>
+
+
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
@@ -205,36 +270,3 @@ import Layout from '../layouts/Layout-registro.astro';
         text-decoration: underline;
     }
 </style>
-
-<script>
-document.getElementById('loginForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    try {
-      const response = await fetch('http://localhost:5000/api/auth/iniciar-sesion', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Guardar token en cookies
-        document.cookie = `token=${data.token}; path=/; secure; HttpOnly`;
-        alert('Inicio de sesión exitoso');
-        window.location.href = 'http://localhost:3000'; // Redirigir al dashboard
-      } else {
-        alert(data.error || 'Error en el inicio de sesión');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error al conectarse al servidor');
-    }
-  });
-</script>
