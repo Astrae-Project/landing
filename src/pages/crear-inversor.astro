@@ -1,0 +1,341 @@
+---
+import Layout from '../layouts/Layout-registro.astro';
+---
+
+<Layout title="Plantilla">
+  <body>
+    <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
+    <img id="fondo" src="Imagenes/Registro/Fondo.svg">
+    <div id="blur"></div>
+    <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
+    <header>
+      <h1>Finaliza tu Perfil</h1>
+      <p id="subtexto-principal">Completa los últimos campos de tu perfil para poder disfrutar<br> plenamente de todas las funciones de la app</p>
+    </header>
+    <form id="investorForm" method="post">
+      <!-- Paso 1: Nombre -->
+      <div id="step1" class="step">
+        <input id="nombre" type="text" name="nombre" placeholder="Nombre" required>
+        <button id="next1" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+      </div>
+      <!-- Paso 2: Usuario -->
+      <div id="step2" class="step" style="display: none;">
+        <input id="usuario" type="text" name="usuario" placeholder="Usuario" required>
+        <button id="next2" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+      </div>
+      <!-- Paso 3: Perfil de inversión -->
+      <div id="step3" style="display: none;" class="perfil-container">
+        <div class="role-card" data-value="angel">
+          <lord-icon
+            src="https://cdn.lordicon.com/unpodmqs.json"
+            trigger="hover"
+            colors="primary:#aaaaaa"
+            style="width:100px;height:100px">
+          </lord-icon>
+          <p>Angel Investor</p>
+        </div>
+        <div class="role-card" data-value="venture">
+          <lord-icon
+            src="https://cdn.lordicon.com/wyqtxzeh.json"
+            trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p id="text2">Venture Capitalist</p>
+        </div>
+        <button id="button-role" type="submit" class="confirm-role" disabled>CREAR PERFIL</button>
+      </div>            
+    </form>
+  </body>
+
+  <script>
+    import axios from "axios";
+    
+    const blurDiv = document.getElementById('blur');
+    const investorForm = document.getElementById('investorForm');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    
+    const next1 = document.getElementById('next1');
+    const next2 = document.getElementById('next2');
+    const botonRol = document.getElementById('button-role');
+    
+    const nombreInput = document.getElementById('nombre');
+    const usuarioInput = document.getElementById('usuario');
+    
+    // Activar blur al empezar a escribir en el campo 'nombre'
+    nombreInput.addEventListener('input', function() {
+      if (nombreInput.value != '') {
+        blurDiv.classList.add('blur-active');
+      }
+    });
+    
+    // Reiniciar el formulario si se hace clic fuera del formulario
+    document.addEventListener('click', function(event) {
+      const isClickInsideForm = investorForm.contains(event.target);
+      if (!isClickInsideForm) {
+        investorForm.reset();
+        step1.style.display = 'block';
+        step2.style.display = 'none';
+        step3.style.display = 'none';
+        blurDiv.classList.remove('blur-active');
+        botonRol.disabled = true; // Deshabilitar el botón al reiniciar
+        botonRol.style.backgroundColor = 'grey'; // Color gris
+      }
+    });
+    
+    // Avanzar al segundo paso
+    next1.addEventListener('click', function () {
+      if (nombreInput.value) {
+        step1.style.display = 'none';
+        step2.style.display = 'block';
+      } else {
+        alert('Por favor, ingresa un nombre.');
+      }
+    });
+    
+    // Avanzar al tercer paso
+    next2.addEventListener('click', function () {
+      if (usuarioInput.value) {
+        step2.style.display = 'none';
+        step3.style.display = 'flex';
+        botonRol.style.display = 'block'; // Mostrar el botón solo en el tercer paso
+      } else {
+        alert('Por favor, ingresa un nombre de usuario.');
+      }
+    });
+
+    // Manejar la selección de perfil y el envío del formulario
+    const perfilCards = document.querySelectorAll('.role-card');
+    perfilCards.forEach(card => {
+      card.addEventListener('click', function () {
+        // Limpiar selección anterior
+        perfilCards.forEach(c => c.classList.remove('selected'));
+
+        // Seleccionar la tarjeta actual
+        card.classList.add('selected');
+
+        // Cambiar el estado del botón
+        botonRol.disabled = false; // Habilitar el botón
+      });
+    });
+
+    // Manejar el envío del formulario
+    botonRol.addEventListener('click', async function () {
+      const perfil = document.querySelector('.role-card.selected').getAttribute('data-value');
+      const nombre = nombreInput.value;
+      const usuario = usuarioInput.value;
+      
+      try {
+        const response = await axios.post('http://localhost:5000/api/auth/crear-inversor/:id', {
+          nombre,
+          usuario,
+          perfil
+        });
+        
+        if (response.status === 201) {
+          window.location.href = 'http://localhost:4321/';
+        } else {
+          alert('Hubo un problema al completar el registro.');
+        }
+      } catch (error) {
+        console.error('Error en el registro:', error);
+        alert('Error al conectarse al servidor.');
+      }
+    });
+  </script>
+</Layout>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+  img#estrellas{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+
+  img#fondo{
+    position: absolute;
+    align-self: center;
+    width: 100%;
+    height: 80%;
+    z-index: -2;
+  }
+
+  div#blur{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #0909129c;
+    backdrop-filter: blur(10px);
+    transition: z-index 0.1s ease;
+  }
+
+  div#blur.blur-active {
+    z-index: 3; /* Mantén este valor bajo el input (z-index 4) */
+  }
+
+  a#cerrar{
+    position: absolute;
+    left: 60px;
+    top: 60px;
+    z-index: 4;
+  }
+
+  h1{
+    position: relative;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(150deg, #FFFFFF 0%, #fff 30%, #6B6B71 70%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    margin-top: 275px;
+  }
+
+  p#subtexto-principal{
+    position: relative;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+    color: #9292ad;
+    margin-top: -19px;
+    margin-bottom: 21px;
+  }
+
+  form{
+    position: relative;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-self: center;
+    z-index: 4;
+    flex-direction: column; /* Cambiar a columna para mejor distribución */
+  }
+
+  input{
+    width: 89%;
+    height: inherit;
+    padding: 0px 8px 1px 0px;
+    color: rgb(255, 255, 255);
+    transition: color 0.3s;
+    border: none;
+    background: transparent;
+    color: rgb(255, 255, 255);
+    caret-color: rgb(71, 159, 250);
+    font-size: 14px;
+  }
+
+  .step{
+    position: relative;
+    width: 320px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 1px inset;
+    backdrop-filter: blur(2px);
+    border-radius: 92px;
+    padding-left: 21px;
+    display: flex;
+    cursor: text;
+    align-self: center;
+  }
+
+  .perfil-container {
+    position: relative;
+    justify-content: center;
+    gap: 40px; /* Espacio entre los botones */
+    top: -85px;
+  }
+
+  .role-card {
+    width: 111px;
+    height: 126px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px; /* Bordes más redondeados */
+    margin: 10px; /* Mayor separación entre tarjetas */
+    padding: 25px; /* Más espacio interior */
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Agregar animación de transformación */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+  }
+
+  .role-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px); /* Levantar la tarjeta al pasar el mouse */
+  }
+
+  .role-card p {
+    position: relative;
+    font-size: 13px;
+    background: linear-gradient(160deg, #FFFFFF 0%, #ffffff 50%, #6B6B71 99%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    text-align: center;
+    bottom: -2px;
+  }
+
+  .role-card.selected {
+  border: 2px solid #683FEA; /* Color de borde para la tarjeta seleccionada */
+  box-shadow: 0px 4px 10px #673fea35
+  }
+
+  .confirm-role {
+    background-color: #683FEA;
+    position: absolute;
+    display: none;
+    color: #e9e9e9;
+    border: 2px solid #683FEA; /* Color de borde para la tarjeta seleccionada */
+    box-shadow: 0px 0px 20px #673fea75;
+    border-radius: 25px;
+    font-size: 14px;
+    width: 200px;
+    height: 44px;
+    bottom: -70px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .confirm-role:disabled {
+  background-color: rgba(101, 101, 101, 0.2);
+  cursor: auto;
+  border: none;
+  box-shadow: none;
+}
+
+  input:focus {
+    outline: none;
+  }
+
+  .next{
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    display: flex;
+    width: 25px;
+    height: 25px;
+    right: 20px;
+    top: 6px;
+    border-radius: 50px;
+    cursor: pointer;
+  }
+
+  lord-icon{
+    position: relative;
+  }
+
+  #text2{
+    bottom: -12px;
+    font-size: 13px;
+  }
+</style>

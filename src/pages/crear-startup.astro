@@ -70,7 +70,7 @@ import Layout from '../layouts/Layout-registro.astro';
       
             // Verificar la respuesta y redirigir si el registro fue exitoso
             if (response.status === 201 && response.data.id) {
-              window.location.href = `http://localhost:3000/seleccionar-rol`;
+              window.location.href = `http://localhost:4231/`;
             } else {
               console.error('Error en el registro:', response.data);
               alert('Error en el registro, por favor intenta nuevamente.');
