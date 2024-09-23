@@ -13,7 +13,8 @@ const { title } = Astro.props;
 		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <title> Astrae | Portal de inversión en Startups </title> 
+        <title> Astrae | Portal de inversión en Startups </title>
+        <script src="https://cdn.lordicon.com/ritcuqlt.js"></script>
 	</head>
 	<body>
 		<slot />
@@ -37,7 +38,9 @@ const { title } = Astro.props;
     }
 </style>
 
-<script src="https://cdn.lordicon.com/ritcuqlt.js">
+<script>
+    import axios from "axios";
+    axios.defaults.withCredentials = true;
     
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');

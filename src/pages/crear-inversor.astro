@@ -50,7 +50,8 @@ import Layout from '../layouts/Layout-registro.astro';
 
   <script>
     import axios from "axios";
-    
+    import { jwtDecode } from "jwt-decode";
+
     const blurDiv = document.getElementById('blur');
     const investorForm = document.getElementById('investorForm');
     const step1 = document.getElementById('step1');
@@ -63,15 +64,14 @@ import Layout from '../layouts/Layout-registro.astro';
     
     const nombreInput = document.getElementById('nombre');
     const usuarioInput = document.getElementById('usuario');
+
     
-    // Activar blur al empezar a escribir en el campo 'nombre'
     nombreInput.addEventListener('input', function() {
       if (nombreInput.value != '') {
         blurDiv.classList.add('blur-active');
       }
     });
     
-    // Reiniciar el formulario si se hace clic fuera del formulario
     document.addEventListener('click', function(event) {
       const isClickInsideForm = investorForm.contains(event.target);
       if (!isClickInsideForm) {
@@ -80,12 +80,10 @@ import Layout from '../layouts/Layout-registro.astro';
         step2.style.display = 'none';
         step3.style.display = 'none';
         blurDiv.classList.remove('blur-active');
-        botonRol.disabled = true; // Deshabilitar el botón al reiniciar
-        botonRol.style.backgroundColor = 'grey'; // Color gris
+        botonRol.disabled = true;
       }
     });
     
-    // Avanzar al segundo paso
     next1.addEventListener('click', function () {
       if (nombreInput.value) {
         step1.style.display = 'none';
@@ -95,57 +93,57 @@ import Layout from '../layouts/Layout-registro.astro';
       }
     });
     
-    // Avanzar al tercer paso
     next2.addEventListener('click', function () {
-      if (usuarioInput.value) {
+      if (document.getElementById('usuario').value) {
         step2.style.display = 'none';
         step3.style.display = 'flex';
-        botonRol.style.display = 'block'; // Mostrar el botón solo en el tercer paso
+        botonRol.style.display = 'block';
       } else {
         alert('Por favor, ingresa un nombre de usuario.');
       }
     });
 
-    // Manejar la selección de perfil y el envío del formulario
     const perfilCards = document.querySelectorAll('.role-card');
     perfilCards.forEach(card => {
       card.addEventListener('click', function () {
-        // Limpiar selección anterior
         perfilCards.forEach(c => c.classList.remove('selected'));
-
-        // Seleccionar la tarjeta actual
         card.classList.add('selected');
-
-        // Cambiar el estado del botón
-        botonRol.disabled = false; // Habilitar el botón
+        botonRol.disabled = false;
       });
     });
 
-    // Manejar el envío del formulario
-    botonRol.addEventListener('click', async function () {
-      const perfil = document.querySelector('.role-card.selected').getAttribute('data-value');
-      const nombre = nombreInput.value;
+    botonRol.addEventListener('click', async function (event) {
+      event.preventDefault(); // Evitar el envío por defecto del formulario
+      const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1];
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id; // Obtiene el userId del token
+      
+      const perfil_inversion = document.querySelector('.role-card.selected').getAttribute('data-value');
+      const nombre_inversor = nombreInput.value;
       const usuario = usuarioInput.value;
       
       try {
-        const response = await axios.post('http://localhost:5000/api/auth/crear-inversor/:id', {
-          nombre,
-          usuario,
-          perfil
+        const response = await axios.post(`http://localhost:5000/api/auth/crear-inversor/${userId}`, {
+        nombre_inversor,
+        perfil_inversion,
+        usuario
         });
+
         
         if (response.status === 201) {
-          window.location.href = 'http://localhost:4321/';
+          window.location.href = 'http://localhost:3000/';
         } else {
           alert('Hubo un problema al completar el registro.');
         }
       } catch (error) {
-        console.error('Error en el registro:', error);
-        alert('Error al conectarse al servidor.');
-      }
+    console.error('Error en el registro:', error.response || error.message);
+    alert('Error al conectarse al servidor: ' + (error.response ? error.response.data : error.message));
+}
+
     });
   </script>
 </Layout>
+
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');

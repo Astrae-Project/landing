@@ -201,6 +201,9 @@ const { title } = Astro.props;
 </style>
 
 <script>
+  import axios from "axios";
+  axios.defaults.withCredentials = true;
+
   document.addEventListener("DOMContentLoaded", function () {
     const menuButton = document.getElementById("menu");
     const menu = document.getElementById("menu-desplegable");

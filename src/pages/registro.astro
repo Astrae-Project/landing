@@ -27,61 +27,70 @@ import Layout from '../layouts/Layout-registro.astro';
     </body>
     <script>
         import axios from 'axios';
-      
+    
         const registerForm = document.getElementById('registerForm');
         const emailInput = document.getElementById('email');
         const passwordContainer = document.getElementById('password-container');
         const passwordInput = document.getElementById('password');
-      
+    
         registerForm.addEventListener('submit', async function (event) {
-          event.preventDefault();
-      
-          // Obtener el email
-          const email = emailInput.value;
-          
-          // Verificar si el campo de contraseña está visible
-          if (passwordContainer.style.display === 'none') {
-            // Validar que se haya ingresado un email
-            if (!email) {
-              alert('Por favor, introduce un email válido');
-              return;
+            event.preventDefault();
+    
+            // Obtener el email
+            const email = emailInput.value;
+    
+            // Verificar si el campo de contraseña está visible
+            if (passwordContainer.style.display === 'none') {
+                // Validar que se haya ingresado un email
+                if (!email) {
+                    alert('Por favor, introduce un email válido');
+                    return;
+                }
+    
+                // Mostrar el campo de la contraseña
+                passwordContainer.style.display = 'block';
+                return;
             }
-            
-            // Mostrar el campo de la contraseña
-            passwordContainer.style.display = 'block';
-            return;
-          }
-      
-          // Obtener la contraseña
-          const password = passwordInput.value;
-      
-          // Validar que se haya ingresado una contraseña
-          if (!password) {
-            alert('Por favor, introduce una contraseña');
-            return;
-          }
-      
-          // Enviar los datos al servidor
-          try {
-            const response = await axios.post('http://localhost:5000/api/auth/registrar', {
-              email,
-              password
-            });
-      
-            // Verificar la respuesta y redirigir si el registro fue exitoso
-            if (response.status === 201 && response.data.id) {
-              window.location.href = `http://localhost:3000/seleccionar-rol`;
-            } else {
-              console.error('Error en el registro:', response.data);
-              alert('Error en el registro, por favor intenta nuevamente.');
+    
+            // Obtener la contraseña
+            const password = passwordInput.value;
+    
+            // Validar que se haya ingresado una contraseña
+            if (!password) {
+                alert('Por favor, introduce una contraseña');
+                return;
             }
-          } catch (error) {
-            console.error('Error en la solicitud:', error);
-            alert('Error al conectarse al servidor');
-          }
+    
+            // Enviar los datos al servidor
+            try {
+                const response = await axios.post('http://localhost:5000/api/auth/registrar', {
+                    email,
+                    password
+                });
+    
+                // Verificar la respuesta y redirigir si el registro fue exitoso
+                if (response.status === 201) {
+                    console.log('Registro exitoso:', response.data);
+                    // Log del token si se encuentra en la respuesta
+                    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+                    console.log('Token guardado en la cookie:', token ? token.split('=')[1] : 'No se encontró el token');
+    
+                    // Redirigir a la página de selección de rol
+                    window.location.href = 'http://localhost:4321/seleccionar-rol';
+                } else {
+                    console.error('Error en el registro:', response.data);
+                    alert('Error en el registro, por favor intenta nuevamente.');
+                }
+            } catch (error) {
+                console.error('Error en la solicitud:', error);
+                alert('Error al conectarse al servidor');
+            }
         });
-      </script>
-      </Layout>
+    </script>
+    
+    
+    
+</Layout>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');

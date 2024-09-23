@@ -3,167 +3,192 @@ import Layout from '../layouts/Layout-registro.astro';
 ---
 
 <Layout title="Plantilla">
-    <body>
-        <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
-        <img id="fondo" src="Imagenes/Registro/Fondo.svg">
-        <div id="blur"></div>
-        <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
-        <header>
-            <h1>Seleccionar tu Rol</h1>
-        </header>
-        <section id="role-selection">
-            <form id="role-form">
-              <div class="role-option">
-                <input type="radio" id="inversor" name="role" value="inversor">
-                <label for="inversor">
-                  <h2>Inversor</h2>
-                </label>
-              </div>
-              <div class="role-option">
-                <input type="radio" id="startup" name="role" value="startup">
-                <label for="startup">
-                  <h2>Startup</h2>
-                </label>
-              </div>
-            </form>
-        </section>          
-    </body>
-    <script>
-        const roleForm = document.getElementById('role-form');
-      
-        roleForm.addEventListener('change', () => {
-          const selectedRole = document.querySelector('input[name="role"]:checked').value;
-          
-          // Redirige según el rol seleccionado
-          if (selectedRole === 'inversor') {
-            window.location.href = '/crear-inversor'; // Redirige al registro de inversor
-          } else if (selectedRole === 'startup') {
-            window.location.href = '/crear-startup'; // Redirige al registro de startup
-          }
+  <body>
+    <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
+    <img id="fondo" src="Imagenes/Registro/Fondo.svg">
+    <div id="blur"></div>
+    <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
+    <header>
+      <h1>Selecciona tu Rol</h1>
+    </header>
+    <form>
+      <div id="step3" class="perfil-container">
+        <div class="role-card" data-value="inversor">
+          <lord-icon
+          src="https://cdn.lordicon.com/bgebyztw.json"
+          trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:100px;height:100px">
+          </lord-icon>
+          <p>Inversor</p>
+        </div>
+        <div class="role-card" data-value="startup">
+          <lord-icon
+            src="https://cdn.lordicon.com/qmsejndz.json"
+            trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p id="texto2">Startup</p>
+        </div>
+      </div>   
+    </form>
+  </body>
+
+  <script>
+    import axios from "axios";
+    import { jwtDecode } from "jwt-decode"
+
+    const rolCards = document.querySelectorAll('.role-card');
+
+    rolCards.forEach(card => {
+        card.addEventListener('click', async function () {
+            const rol = card.getAttribute('data-value');
+
+            // Obtener el token de las cookies
+            const cookieString = document.cookie;
+            const tokenCookie = cookieString.split('; ').find(row => row.startsWith('token='));
+
+            if (!tokenCookie) {
+                alert('No se encontró el token. Por favor, inicia sesión nuevamente.');
+                return;
+            }
+
+            const token = tokenCookie.split('=')[1];
+
+            // Decodificar el token para obtener el ID del usuario
+            try {
+              const decodedToken = jwtDecode(token);
+              console.log('Contenido del token decodificado:', decodedToken); // Verifica que esto se imprima correctamente
+
+                // Acceder al ID
+                const userId = decodedToken.id;
+
+                if (userId) {
+                    console.log('ID del usuario:', userId); // Esto debería funcionar
+                } else {
+                    console.error('ID del usuario no encontrado en el token.');
+}
+
+                // Aquí se envía la solicitud al backend
+                const response = await axios.post(`http://localhost:5000/api/auth/seleccionar-rol/${userId}`, {
+                    rol
+                });
+
+                if (response.status === 200) {
+                    // Redirige según el perfil seleccionado
+                    if (rol === 'inversor') {
+                        window.location.href = '/crear-inversor'; // Redirige al registro de inversor
+                    } else if (rol === 'startup') {
+                        window.location.href = '/crear-startup'; // Redirige al registro de startup
+                    }
+                } else {
+                    alert('Hubo un problema al guardar el rol.');
+                }
+            } catch (error) {
+                console.error('Error al seleccionar rol:', error);
+                alert('Error al seleccionar rol.');
+            }
         });
-      </script>          
+    });
+</script>
+
+
 </Layout>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-    img#estrellas{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-    }
-
-    img#fondo{
-        position: absolute;
-        align-self: center;
-        width: 100%;
-        height: 80%;
-        z-index: -2;
-    }
-
-    div#blur{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background-color: #0909129c;
-        backdrop-filter: blur(10px);
-        transition: z-index 0.1s ease;
-    }
-
-    div#blur.blur-active {
-        z-index: 3;
-    }
-
-    a#cerrar{
-        position: absolute;
-        left: 60px;
-        top: 60px;
-        z-index: 4;
-    }
-
-    h1{
-        position: relative;
-        text-align: center;
-        font-size: 32px;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        background: linear-gradient(150deg, #FFFFFF 0%, #fff 30%, #6B6B71 70%);
-        -webkit-background-clip: text;
-        color: transparent;
-        background-clip: text;
-        margin-top: 275px;
-        margin-right: 2rem;
-    }
-
-    p#subtexto-principal{
-        position: relative;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 24px;
-        text-align: center;
-        color: #9292ad;
-        margin-top: -15px;
-        margin-bottom: 22px;
-    }
-    #role-selection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    margin: 50px auto;
-    }
-
-    form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+img#estrellas {
+    position: absolute;
     width: 100%;
-    max-width: 800px;
-    }
+    height: 100%;
+    z-index: 0;
+}
 
-    .role-option {
-    display: flex;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 20px;
-    border-radius: 15px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: transform 0.2s;
-    }
+img#fondo {
+    position: absolute;
+    align-self: center;
+    width: 100%;
+    height: 80%;
+    z-index: -2;
+}
 
-   input{
+div#blur {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    background-color: #0909129c;
+    backdrop-filter: blur(10px);
+}
+
+a#cerrar {
+    position: absolute;
+    left: 60px;
+    top: 60px;
+    z-index: 4;
+}
+
+h1 {
     position: relative;
-    z-index: 10;
-   }
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    background: linear-gradient(150deg, #FFFFFF 0%, #fff 30%, #6B6B71 70%);
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-top: 275px;
+    z-index: 4;
+}
 
-    .role-option label {
+form {
+  position: relative;
+    width: auto;
+    height: auto;
     display: flex;
-    align-items: center;
+    align-self: center;
+    z-index: 4;
+    flex-direction: column; /* Cambiar a columna para mejor distribución */
+}
+
+.perfil-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    top: -85px;
+}
+
+.role-card {
+  width: 111px;
+    height: 126px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px; /* Bordes más redondeados */
+    margin: 10px; /* Mayor separación entre tarjetas */
+    padding: 25px; /* Más espacio interior */
+    text-align: center;
     cursor: pointer;
-    width: 100%;
-    }
+    transition: all 0.3s ease; /* Agregar animación de transformación */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+}
 
-    .role-option img {
-    width: 80px;
-    height: 80px;
-    margin-right: 20px;
-    }
+.role-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
 
-    .role-option h2 {
-    font-size: 24px;
-    color: white;
-    margin: 0;
-    }
+.role-card p {
+    position: relative;
+    font-size: 16px;
+    background: linear-gradient(160deg, #FFFFFF 0%, #ffffff 50%, #6B6B71 99%);
+    -webkit-background-clip: text;
+    color: transparent;
+    bottom: 3px;
+}
 
-    .role-option p {
-    font-size: 14px;
-    color: #b0b0b0;
-    }
-
-    input[type="radio"]:checked + label {
-    background-color: rgba(255, 255, 255, 0.2);
-    }
-
+#texto2{
+    bottom: -6px;
+  }
 </style>
