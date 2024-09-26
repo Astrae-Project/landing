@@ -3,261 +3,481 @@ import Layout from '../layouts/Layout-registro.astro';
 ---
 
 <Layout title="Plantilla">
-    <body>
-        <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
-        <img id="fondo" src="Imagenes/Registro/Fondo.svg">
-        <div id="blur"></div>
-        <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
-        <header>
-            <h1>Bienvenido a Astrae</h1>
-            <p id="subtexto-principal">Abre un mundo de grandes oportunidades entrando con <br>tu email o iniciando sesión con tu cuenta de Google</p>
-        </header>
-        <form id="registerForm" method="post">
-            <input id="email" type="email" placeholder="Introduce email" required>
-            <div id="password-container" style="display: none;">
-                <input id="password" type="password" placeholder="Contraseña" required> 
-                <span id="toggle-password" style="cursor: pointer;">
-                    <img id="eye-icon" src="Imagenes/Registro/Ojo cerrado.png" alt="Mostrar/Ocultar Contraseña">
-                </span>
-            </div>
-            <button id="submit-btn" type="submit"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
-        </form>
-        <button id="iniciar" type="button"><img id="google" src="Imagenes/Registro/Inicia sesion con google.svg"></button>
-        <p class="texto-abajo"><span id="regular">Si ya te has registrado previamente,</span><a href="/inicio-sesion" id="texto-abajo">Inicia Sesión</a></p>
-    </body>
-    <script>
-        import axios from 'axios';
-      
-        const registerForm = document.getElementById('registerForm');
-        const emailInput = document.getElementById('email');
-        const passwordContainer = document.getElementById('password-container');
-        const passwordInput = document.getElementById('password');
-      
-        registerForm.addEventListener('submit', async function (event) {
-          event.preventDefault();
-      
-          // Obtener el email
-          const email = emailInput.value;
-          
-          // Verificar si el campo de contraseña está visible
-          if (passwordContainer.style.display === 'none') {
-            // Validar que se haya ingresado un email
-            if (!email) {
-              alert('Por favor, introduce un email válido');
-              return;
-            }
+  <body>
+    <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
+    <img id="fondo" src="Imagenes/Registro/Fondo.svg">
+    <div id="blur"></div>
+    <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
+    <header>
+      <h1>Completa tu Perfil</h1>
+      <p id="subtexto-principal">Completa los últimos campos de tu perfil para poder disfrutar<br> plenamente de todas las funciones de la app</p>
+    </header>
+    <form id="startupForm" method="post">
+      <!-- Paso 1: Nombre -->
+      <div id="step1" class="step">
+        <input id="nombre" type="text" name="nombre" placeholder="Nombre" required>
+        <button id="next1" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+      </div>
+      <!-- Paso 2: Usuario -->
+      <div id="step2" class="step" style="display: none;">
+        <input id="usuario" type="text" name="usuario" placeholder="Usuario" required>
+        <button id="next2" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+      </div>
+      <!-- Paso 3: Sector -->
+      <div id="step3" class="step" style="display: none;">
+        <input id="sector" type="text" name="sector" placeholder="Sector" required>
+        <button id="next3" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+      </div>
+
+      <div id="step4" class="step" style="display: none;">
+        <input id="plantilla" type="number" name="plantilla" placeholder="Nº Plantilla" required>
+        <button id="next4" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+      </div> 
+
+      <div id="step5" class="step" style="display: none;">
+        <input id="porcentaje" type="text" name="porcentaje" placeholder="Porcentaje" required>
+        <button id="next5" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+      </div> 
+
+      <div id="step6" class="financiation-container" style="display: none">
+        <h1 id="titulo2">Ronda de Financiación</h1>
+        <div class="financiation-card" data-value="autoinversion">
+          <lord-icon
+          src="https://cdn.lordicon.com/nkfxhqqr.json"
+          trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p>Autoinversion</p>
+        </div>
+        <div class="financiation-card" data-value="pre-seed">
+          <lord-icon
+            src="https://cdn.lordicon.com/ysonqgnt.json"
+            trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p id="texto2">Pre-Seed</p>
+        </div>
+        <div class="financiation-card" data-value="seed">
+          <lord-icon
+            src="https://cdn.lordicon.com/lsfszdzd.json"
+            trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p id="texto2">Seed</p>
+        </div>
+        <div class="financiation-card" data-value="serie-a">
+          <lord-icon
+            src="https://cdn.lordicon.com/abwrkdvl.json"
+            trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p id="texto2">Serie A</p>
+        </div>
+        <div class="financiation-card" data-value="serie-b">
+          <lord-icon
+            src="https://cdn.lordicon.com/qhsqomjd.json"
+            trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p id="texto2">Serie B</p>
+        </div>
+        <div class="financiation-card" data-value="serie-c">
+          <lord-icon
+            src="https://cdn.lordicon.com/trkmlure.json"
+            trigger="hover"
+            colors="primary:#aaaaaa,secondary:#aaaaaa"
+            style="width:90px;height:90px">
+          </lord-icon>
+          <p id="texto2">Serie C</p>
+        </div>
+        <button id="button-role" type="submit" class="confirm-role" disabled>CREAR PERFIL</button>
+      </div>
             
-            // Mostrar el campo de la contraseña
-            passwordContainer.style.display = 'block';
-            return;
-          }
-      
-          // Obtener la contraseña
-          const password = passwordInput.value;
-      
-          // Validar que se haya ingresado una contraseña
-          if (!password) {
-            alert('Por favor, introduce una contraseña');
-            return;
-          }
-      
-          // Enviar los datos al servidor
-          try {
-            const response = await axios.post('http://localhost:5000/api/auth/registrar', {
-              email,
-              password
-            });
-      
-            // Verificar la respuesta y redirigir si el registro fue exitoso
-            if (response.status === 201 && response.data.id) {
-              window.location.href = `http://localhost:4231/`;
-            } else {
-              console.error('Error en el registro:', response.data);
-              alert('Error en el registro, por favor intenta nuevamente.');
-            }
-          } catch (error) {
-            console.error('Error en la solicitud:', error);
-            alert('Error al conectarse al servidor');
-          }
+    </form>
+  </body>
+
+  <script>
+    import axios from "axios";
+    import { jwtDecode } from "jwt-decode"; // Asegúrate de tener esta dependencia instalada
+  
+    const blurDiv = document.getElementById('blur');
+    const startupForm = document.getElementById('startupForm');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const step4 = document.getElementById('step4');
+    const step5 = document.getElementById('step5');
+    const step6 = document.getElementById('step6');
+  
+    const next1 = document.getElementById('next1');
+    const next2 = document.getElementById('next2');
+    const next3 = document.getElementById('next3');
+    const next4 = document.getElementById('next4');
+    const next5 = document.getElementById('next5');
+    const button = document.getElementById('button-role');
+  
+    const nombreInput = document.getElementById('nombre');
+    const usuarioInput = document.getElementById('usuario');
+    const sectorInput = document.getElementById('sector');
+    const plantillaInput = document.getElementById('plantilla');
+    const porcentajeInput = document.getElementById('porcentaje');
+  
+    let financiation = '';
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      nombreInput.addEventListener('input', function() {
+        if (nombreInput.value !== '') {
+          blurDiv.classList.add('blur-active');
+        }
+      });
+  
+      document.addEventListener('click', function(event) {
+        const isClickInsideForm = startupForm.contains(event.target);
+        if (!isClickInsideForm) {
+          startupForm.reset();
+          step1.style.display = 'block';
+          step2.style.display = 'none';
+          step3.style.display = 'none';
+          step4.style.display = 'none';
+          step5.style.display = 'none';
+          step6.style.display = 'none';
+          button.style.display = 'none';
+          blurDiv.classList.remove('blur-active');
+        }
+      });
+  
+      // Manejo de transición de pasos
+      next1.addEventListener('click', function () {
+        if (nombreInput.value) {
+          step1.style.display = 'none';
+          step2.style.display = 'block';
+        } else {
+          alert('Por favor, ingresa tu nombre.');
+        }
+      });
+  
+      next2.addEventListener('click', function () {
+        if (usuarioInput.value) {
+          step2.style.display = 'none';
+          step3.style.display = 'block';
+        } else {
+          alert('Por favor, ingresa tu nombre de usuario.');
+        }
+      });
+  
+      next3.addEventListener('click', function () {
+        if (sectorInput.value) {
+          step3.style.display = 'none';
+          step4.style.display = 'block';
+        } else {
+          alert('Por favor, ingresa tu sector.');
+        }
+      });
+  
+      next4.addEventListener('click', function () {
+        if (plantillaInput.value) {
+          step4.style.display = 'none';
+          step5.style.display = 'block';
+        } else {
+          alert('Por favor, ingresa tu número de plantilla.');
+        }
+      });
+  
+      next5.addEventListener('click', function () {
+        if (porcentajeInput.value) {
+          step5.style.display = 'none';
+          step6.style.display = 'flex';
+          button.style.display = 'block';
+        } else {
+          alert('Por favor, indica tu porcentaje no vendido.');
+        }
+      });
+  
+      // Obtener el valor de la tarjeta seleccionada
+      const financiationCards = document.querySelectorAll('.financiation-card');
+      financiationCards.forEach(card => {
+        card.addEventListener('click', function () {
+          financiation = card.getAttribute('data-value'); // Almacena la opción seleccionada
+          financiationCards.forEach(c => c.classList.remove('selected')); // Remover la clase seleccionada de otras tarjetas
+          card.classList.add('selected'); // Agregar clase de selección a la tarjeta actual
+  
+          // Habilitar el botón de envío
+          button.disabled = false;
         });
-      </script>
-      </Layout>
+      });
+  
+      // Función para enviar los datos del formulario
+      button.addEventListener('click', async function(event) {
+        event.preventDefault();
+  
+        // Intentar obtener el token de las cookies
+        const tokenRow = document.cookie.split('; ').find(row => row.startsWith('token='));
+        if (!tokenRow) {
+          console.error('Token no encontrado en las cookies');
+          alert('No se encontró el token. Por favor, inicia sesión nuevamente.');
+          return; // Detener la ejecución si no hay token
+        }
+  
+        const token = tokenRow.split('=')[1];
+        
+        try {
+          const decodedToken = jwtDecode(token);
+          if (!decodedToken || !decodedToken.id) {
+            console.error('Token inválido o sin ID');
+            alert('Token inválido. Por favor, inicia sesión nuevamente.');
+            return;
+          }
+          const userId = decodedToken.id; // Obteniendo el userId del token
+  
+          const estado_financiacion = document.querySelector('.financiation-card.selected')?.getAttribute('data-value');
+          const nombre_startup = nombreInput.value;
+          const usuario = usuarioInput.value;
+          const sector = sectorInput.value;
+          const plantilla = plantillaInput.value;
+          const porcentaje = porcentajeInput.value;
+  
+          // Log de todos los valores
+          console.log('Valores enviados:', {
+            nombre_startup,
+            usuario,
+            sector,
+            plantilla,
+            porcentaje,
+            estado_financiacion,
+            userId
+          });
+  
+          const response = await axios.post(`http://localhost:5000/api/auth/crear-startup/${userId}`, {
+            nombre_startup,
+            usuario,
+            sector,
+            plantilla,
+            porcentaje,
+            estado_financiacion
+          });
+  
+          if (response.status === 200) {
+            window.location.href = 'http://localhost:3000/';
+          } else {
+            alert('Hubo un problema al completar el registro.');
+          }
+        } catch (error) {
+          console.error('Error en el registro:', error.response || error.message);
+          alert('Error al conectarse al servidor: ' + (error.response ? error.response.data : error.message));
+        }
+      });
+    });
+  </script>
+  
+  
+</Layout>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-    img#estrellas{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-    }
+  img#estrellas{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
 
-    img#fondo{
-        position: absolute;
-        align-self: center;
-        width: 100%;
-        height: 80%;
-        z-index: -2;
-    }
+  img#fondo{
+    position: absolute;
+    align-self: center;
+    width: 100%;
+    height: 80%;
+    z-index: -2;
+  }
 
-    div#blur{
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background-color: #0909129c;
-        backdrop-filter: blur(10px);
-        transition: z-index 0.1s ease;
-    }
+  div#blur{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #0909129c;
+    backdrop-filter: blur(10px);
+    transition: z-index 0.1s ease;
+  }
 
-    div#blur.blur-active {
-        z-index: 3; /* Mantén este valor bajo el input (z-index 4) */
-    }
+  div#blur.blur-active {
+    z-index: 3; /* Mantén este valor bajo el input (z-index 4) */
+  }
 
-    a#cerrar{
-        position: absolute;
-        left: 60px;
-        top: 60px;
-        z-index: 4;
-    }
+  a#cerrar{
+    position: absolute;
+    left: 60px;
+    top: 60px;
+    z-index: 4;
+  }
 
-    h1{
-        position: relative;
-        text-align: center;
-        font-size: 32px;
-        font-weight: 700;
-        letter-spacing: -1px;
-        background: linear-gradient(150deg, #FFFFFF 0%, #fff 30%, #6B6B71 70%);
-        -webkit-background-clip: text;
-        color: transparent;
-        background-clip: text;
-        margin-top: 275px;
-    }
+  h1{
+    position: relative;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(150deg, #FFFFFF 0%, #fff 30%, #6B6B71 70%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    margin-top: 275px;
+  }
 
-    p#subtexto-principal{
-        position: relative;
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 24px;
-        text-align: center;
-        color: #9292ad;
-        margin-top: -20px;
-        margin-bottom: 22px;
-    }
+  p#subtexto-principal{
+    position: relative;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+    color: #9292ad;
+    margin-top: -19px;
+    margin-bottom: 21px;
+  }
 
-    form{
-        position: relative;
-        width: 320px;
-        height: 44px;
-        background: rgba(255, 255, 255, 0.06);
-        border: 0.5px solid rgba(255, 255, 255, 0.08);
-        box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 1px inset;
-        backdrop-filter: blur(2px);
-        border-radius: 92px;
-        padding-left: 21px;
-        display: flex;
-        cursor: text;
-        align-self: center;
-        z-index: 4;
-    }
+  form{
+    position: relative;
+    width: auto;
+    height: auto;
+    display: flex;
+    align-self: center;
+    z-index: 4;
+    flex-direction: column; /* Cambiar a columna para mejor distribución */
+  }
 
-    input{
-        width: 89%;
-        padding: 0px 8px 1px 0px;
-        color: rgb(255, 255, 255);
-        transition: color 0.3s;
-        margin-top: 2px;
-        border: none;
-        background: transparent;
-        color: rgb(255, 255, 255);
-        caret-color: rgb(71, 159, 250);
-    }
+  input{
+    width: 85%;
+    height: inherit;
+    padding: 0px 8px 1px 0px;
+    color: rgb(255, 255, 255);
+    transition: color 0.3s;
+    border: none;
+    background: transparent;
+    color: rgb(255, 255, 255);
+    caret-color: rgb(71, 159, 250);
+    font-size: 14px;
+  }
 
-    input#password{
-        width: 78%;
-    }
+  .step{
+    position: relative;
+    width: 320px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 1px inset;
+    backdrop-filter: blur(2px);
+    border-radius: 92px;
+    padding-left: 21px;
+    display: flex;
+    cursor: text;
+    align-self: center;
+  }
 
-    input:focus {
-        outline: none;
-    }
+  #titulo2{
+    position: absolute;
+    margin-top: -29rem;
+    background: linear-gradient(130deg, #FFFFFF 0%, #fff 30%, #6B6B71);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+  }
 
-    div#password-container {
-        position: relative;
-        width: inherit;
-    }
+  .financiation-container {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    row-gap: 20px;
+    top: -160px;
+    max-width: 65%;
+    flex-wrap: wrap;
+    left: 215px;
+  }
 
-    span#toggle-password {
-        position: absolute;
-        right: 63px;
-        top: 14px;
-    }
+  .financiation-card {
+    width: 101px;
+    height: 116px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px; /* Bordes más redondeados */
+    margin: 10px; /* Mayor separación entre tarjetas */
+    padding: 25px; /* Más espacio interior */
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Agregar animación de transformación */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidad */
+  }
 
-    img#eye-icon {
-        position: absolute;
-        width: 16px;
-        height: 16px;
-    }
+  .financiation-card.selected {
+  border: 2px solid #683FEA; /* Color de borde para la tarjeta seleccionada */
+  box-shadow: 0px 4px 10px #673fea35
+  }
 
-    button{
-        background-color: transparent;
-        border: none;
-        position: absolute;
-        display: flex;
-        align-self: center;
-        width: 25px;
-        height: 25px;
-        right: 9px;
-        border-radius: 50px;
-        cursor: pointer;
-    }
 
-    img#flecha{
-        position: relative;
-        align-self: center;
-        width: 25px;
-        height: 25px;
-        right: 7px;
-    }
+  .financiation-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px); /* Levantar la tarjeta al pasar el mouse */
+    border: 2px solid #683FEA; /* Color de borde para la tarjeta seleccionada */
+    box-shadow: 0px 4px 10px #673fea35
+  }
 
-    button#iniciar{
-        position: relative;
-        width: 190px;
-        height: 20.57px;
-        align-self: center;
-        margin-top: 27px;
-    }
+  .financiation-card p {
+    position: relative;
+    font-size: 14px;
+    background: linear-gradient(160deg, #FFFFFF 0%, #ffffff 50%, #6B6B71 99%);
+    -webkit-background-clip: text;
+    color: transparent;
+    background-clip: text;
+    text-align: center;
+    bottom: -2px;
+  }
 
-    img#google{
-        width: 190px;
-    }
+  .confirm-role {
+    background-color: #683FEA;
+    position: absolute;
+    display: none;
+    color: #e9e9e9;
+    border: 2px solid #683FEA; /* Color de borde para la tarjeta seleccionada */
+    box-shadow: 0px 0px 20px #673fea75;
+    border-radius: 25px;
+    font-size: 14px;
+    width: 200px;
+    height: 44px;
+    bottom: -70px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-    .texto-abajo{
-        margin-top: 300px;
-        text-align: center;
-        position: relative;
-        font-size: 13px;
-        z-index: 4;
-    }
+  .confirm-role:disabled {
+  background-color: rgba(101, 101, 101, 0.2);
+  cursor: auto;
+  border: none;
+  box-shadow: none;
+}
 
-    span#regular{
-        color: #B0B0B0;
-        font-weight: 300;
-        margin-right: 8px;
-    }
+  input:focus {
+    outline: none;
+  }
 
-    a#texto-abajo{
-        position: relative;
-        font-size: 13px;
-        font-weight: 400;
-        bottom: 0;
-        align-self: center;
-        text-decoration: none;
-        color: #fff;
-        cursor: pointer;
-    }
+  .next{
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    display: flex;
+    width: 25px;
+    height: 25px;
+    right: 20px;
+    top: 6px;
+    border-radius: 50px;
+    cursor: pointer;
+  }
 
-    a#texto-abajo:hover{
-        text-decoration: underline;
-    }    
+  lord-icon{
+    position: relative;
+  }
 </style>
