@@ -114,9 +114,7 @@ import Layout from '../layouts/Layout-registro.astro';
 
     botonRol.addEventListener('click', async function (event) {
       event.preventDefault(); // Evitar el envío por defecto del formulario
-      const token = document.cookie.split('; ').find(row => row.startsWith('token=')).split('=')[1];
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.id; // Obtiene el userId del token
+      const userId = localStorage.getItem('userId');
       
       const perfil_inversion = document.querySelector('.role-card.selected').getAttribute('data-value');
       const nombre_inversor = nombreInput.value;

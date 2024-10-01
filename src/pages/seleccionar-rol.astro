@@ -37,63 +37,45 @@ import Layout from '../layouts/Layout-registro.astro';
 
   <script>
     import axios from "axios";
-    import { jwtDecode } from "jwt-decode"
-
+    import { jwtDecode } from "jwt-decode";
+    
     const rolCards = document.querySelectorAll('.role-card');
-
+    
     rolCards.forEach(card => {
-        card.addEventListener('click', async function () {
-            const rol = card.getAttribute('data-value');
-
-            // Obtener el token de las cookies
-            const cookieString = document.cookie;
-            const tokenCookie = cookieString.split('; ').find(row => row.startsWith('token='));
-
-            if (!tokenCookie) {
-                alert('No se encontró el token. Por favor, inicia sesión nuevamente.');
-                return;
+      card.addEventListener('click', async function () {
+        const rol = card.getAttribute('data-value');
+        
+        try {    
+          // Acceder al ID
+          const userId = localStorage.getItem('userId');
+    
+          if (!userId) {
+            console.error('ID del usuario no encontrado en el usuario.');
+            return;
+          }
+    
+          // Aquí se envía la solicitud al backend
+          const response = await axios.post(`http://localhost:5000/api/auth/seleccionar-rol/${userId}`, {
+            rol
+          });
+    
+          if (response.status === 200) {
+            // Redirige según el perfil seleccionado
+            if (rol === 'inversor') {
+              window.location.href = '/crear-inversor';
+            } else if (rol === 'startup') {
+              window.location.href = '/crear-startup';
             }
-
-            const token = tokenCookie.split('=')[1];
-
-            // Decodificar el token para obtener el ID del usuario
-            try {
-              const decodedToken = jwtDecode(token);
-              console.log('Contenido del token decodificado:', decodedToken); // Verifica que esto se imprima correctamente
-
-                // Acceder al ID
-                const userId = decodedToken.id;
-
-                if (userId) {
-                    console.log('ID del usuario:', userId); // Esto debería funcionar
-                } else {
-                    console.error('ID del usuario no encontrado en el token.');
-}
-
-                // Aquí se envía la solicitud al backend
-                const response = await axios.post(`http://localhost:5000/api/auth/seleccionar-rol/${userId}`, {
-                    rol
-                });
-
-                if (response.status === 200) {
-                    // Redirige según el perfil seleccionado
-                    if (rol === 'inversor') {
-                        window.location.href = '/crear-inversor'; // Redirige al registro de inversor
-                    } else if (rol === 'startup') {
-                        window.location.href = '/crear-startup'; // Redirige al registro de startup
-                    }
-                } else {
-                    alert('Hubo un problema al guardar el rol.');
-                }
-            } catch (error) {
-                console.error('Error al seleccionar rol:', error);
-                alert('Error al seleccionar rol.');
-            }
-        });
+          } else {
+            alert('Hubo un problema al guardar el rol.');
+          }
+        } catch (error) {
+          console.error('Error al seleccionar rol:', error);
+          alert('Error al seleccionar rol.');
+        }
+      });
     });
-</script>
-
-
+    </script>    
 </Layout>
 
 <style>

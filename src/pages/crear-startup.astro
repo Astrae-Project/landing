@@ -213,36 +213,22 @@ import Layout from '../layouts/Layout-registro.astro';
   
       // Función para enviar los datos del formulario
       button.addEventListener('click', async function(event) {
-        event.preventDefault();
-  
+    event.preventDefault();
+
+    try {
         // Intentar obtener el token de las cookies
-        const tokenRow = document.cookie.split('; ').find(row => row.startsWith('token='));
-        if (!tokenRow) {
-          console.error('Token no encontrado en las cookies');
-          alert('No se encontró el token. Por favor, inicia sesión nuevamente.');
-          return; // Detener la ejecución si no hay token
-        }
-  
-        const token = tokenRow.split('=')[1];
-        
-        try {
-          const decodedToken = jwtDecode(token);
-          if (!decodedToken || !decodedToken.id) {
-            console.error('Token inválido o sin ID');
-            alert('Token inválido. Por favor, inicia sesión nuevamente.');
-            return;
-          }
-          const userId = decodedToken.id; // Obteniendo el userId del token
-  
-          const estado_financiacion = document.querySelector('.financiation-card.selected')?.getAttribute('data-value');
-          const nombre_startup = nombreInput.value;
-          const usuario = usuarioInput.value;
-          const sector = sectorInput.value;
-          const plantilla = plantillaInput.value;
-          const porcentaje = porcentajeInput.value;
-  
-          // Log de todos los valores
-          console.log('Valores enviados:', {
+        const userId = localStorage.getItem('userId');
+
+        // Obtener los valores de los campos del formulario
+        const estado_financiacion = document.querySelector('.financiation-card.selected')?.getAttribute('data-value');
+        const nombre_startup = nombreInput.value;
+        const usuario = usuarioInput.value;
+        const sector = sectorInput.value;
+        const plantilla = plantillaInput.value;
+        const porcentaje = porcentajeInput.value;
+
+        // Log de todos los valores
+        console.log('Valores enviados:', {
             nombre_startup,
             usuario,
             sector,
@@ -250,28 +236,31 @@ import Layout from '../layouts/Layout-registro.astro';
             porcentaje,
             estado_financiacion,
             userId
-          });
-  
-          const response = await axios.post(`http://localhost:5000/api/auth/crear-startup/${userId}`, {
+        });
+
+        // Enviar la solicitud POST con axios
+        const response = await axios.post(`http://localhost:5000/api/auth/crear-startup/${userId}`, {
             nombre_startup,
             usuario,
             sector,
             plantilla,
             porcentaje,
             estado_financiacion
-          });
-  
-          if (response.status === 200) {
+        });
+
+        // Manejo de la respuesta
+        if (response.status === 200) {
             window.location.href = 'http://localhost:3000/';
-          } else {
+        } else {
             alert('Hubo un problema al completar el registro.');
-          }
-        } catch (error) {
-          console.error('Error en el registro:', error.response || error.message);
-          alert('Error al conectarse al servidor: ' + (error.response ? error.response.data : error.message));
         }
-      });
-    });
+    } catch (error) {
+        // Capturar y manejar errores
+        console.error('Error en el registro:', error.response || error.message);
+        alert('Error al conectarse al servidor: ' + (error.response ? error.response.data : error.message));
+    }
+  });
+});
   </script>
   
   
