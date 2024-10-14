@@ -10,7 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.3",
+    "@astrojs/check": "^0.9.4",
     "@astrojs/react": "^3.6.2",
     "@nextui-org/radio": "^2.1.5",
     "@nextui-org/react": "^2.4.8",
@@ -18,7 +18,7 @@
     "@nextui-org/theme": "^2.2.11",
     "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3.0",
-    "astro": "^4.15.8",
+    "astro": "^4.16.2",
     "axios": "^1.7.7",
     "framer-motion": "^11.5.6",
     "jwt-decode": "^4.0.0",
