@@ -73,15 +73,16 @@ import Layout from '../layouts/Layout-registro.astro';
                 if (response.status === 200) {
                     // Guardar token en cookies
                     document.cookie = `token=${response.data.token}; path=/; ${process.env.NODE_ENV === 'production' ? 'secure; ' : ''}HttpOnly`;
-    
+                    
                     // Configurar y almacenar el refresh token en la cookie
                     document.cookie = `refreshToken=${response.data.refreshToken}; path=/; ${process.env.NODE_ENV === 'production' ? 'secure; ' : ''}HttpOnly`;
-    
+                    
                     window.location.href = 'http://localhost:3000/'; // Redirigir al dashboard
                 } 
                 else {
                     alert(response.data.message || 'Error en el inicio de sesión');
                 }
+
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error al conectarse al servidor');

@@ -217,7 +217,8 @@ import Layout from '../layouts/Layout-registro.astro';
 
     try {
         // Intentar obtener el token de las cookies
-        const userId = localStorage.getItem('userId');
+        const userIdCookie = document.cookie.split('; ').find(row => row.startsWith('userId='));
+        const userId = userIdCookie ? userIdCookie.split('=')[1] : null;
 
         // Obtener los valores de los campos del formulario
         const estado_financiacion = document.querySelector('.financiation-card.selected')?.getAttribute('data-value');

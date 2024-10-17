@@ -74,16 +74,19 @@ import Layout from '../layouts/Layout-registro.astro';
                     // Log del token si se encuentra en la respuesta
                     const token = document.cookie.split('; ').find(row => row.startsWith('token='));
                     console.log('Token guardado en la cookie:', token ? token.split('=')[1] : 'No se encontró el token');
-                    localStorage.setItem('userId', response.data.userId);
+
+                    // Eliminamos localStorage para userId y utilizamos cookies en su lugar
+                    document.cookie = `userId=${response.data.userId}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
+
                     console.log('Usuario registrado, ID guardado:', response.data.userId);
 
-    
                     // Redirigir a la página de selección de rol
                     window.location.href = 'http://localhost:4321/seleccionar-rol';
                 } else {
                     console.error('Error en el registro:', response.data);
                     alert('Error en el registro, por favor intenta nuevamente.');
                 }
+
             } catch (error) {
                 console.error('Error en la solicitud:', error);
                 alert('Error al conectarse al servidor');
