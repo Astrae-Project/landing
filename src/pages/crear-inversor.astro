@@ -18,9 +18,10 @@ import Layout from '../layouts/Layout-registro.astro';
         <input id="nombre" type="text" name="nombre" placeholder="Nombre" required>
         <button id="next1" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
       </div>
-      <!-- Paso 2: Usuario -->
+      <!-- Paso 2: Ciudad y País -->
       <div id="step2" class="step" style="display: none;">
-        <input id="usuario" type="text" name="usuario" placeholder="Usuario" required>
+        <input id="ciudad" type="text" name="ciudad" placeholder="Ciudad" required autocomplete="off">
+        <input id="pais" type="text" name="pais" placeholder="País" required autocomplete="off">
         <button id="next2" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
       </div>
       <!-- Paso 3: Perfil de inversión -->
@@ -63,15 +64,15 @@ import Layout from '../layouts/Layout-registro.astro';
     const botonRol = document.getElementById('button-role');
     
     const nombreInput = document.getElementById('nombre');
-    const usuarioInput = document.getElementById('usuario');
+    const ciudadInput = document.getElementById('ciudad');
+    const paisInput = document.getElementById('pais');
 
-    
     nombreInput.addEventListener('input', function() {
       if (nombreInput.value != '') {
         blurDiv.classList.add('blur-active');
       }
     });
-    
+
     document.addEventListener('click', function(event) {
       const isClickInsideForm = investorForm.contains(event.target);
       if (!isClickInsideForm) {
@@ -83,7 +84,7 @@ import Layout from '../layouts/Layout-registro.astro';
         botonRol.disabled = true;
       }
     });
-    
+
     next1.addEventListener('click', function () {
       if (nombreInput.value) {
         step1.style.display = 'none';
@@ -92,14 +93,14 @@ import Layout from '../layouts/Layout-registro.astro';
         alert('Por favor, ingresa un nombre.');
       }
     });
-    
+
     next2.addEventListener('click', function () {
-      if (document.getElementById('usuario').value) {
+      if (ciudadInput.value && paisInput.value) {
         step2.style.display = 'none';
         step3.style.display = 'flex';
         botonRol.style.display = 'block';
       } else {
-        alert('Por favor, ingresa un nombre de usuario.');
+        alert('Por favor, ingresa ciudad y país.');
       }
     });
 
@@ -114,31 +115,62 @@ import Layout from '../layouts/Layout-registro.astro';
 
     botonRol.addEventListener('click', async function (event) {
       event.preventDefault(); // Evitar el envío por defecto del formulario
-      const userId = localStorage.getItem('userId');
+
+      const userIdCookie = document.cookie.split('; ').find(row => row.startsWith('userId='));
+      const userId = userIdCookie ? userIdCookie.split('=')[1] : null;
+
       
       const perfil_inversion = document.querySelector('.role-card.selected').getAttribute('data-value');
       const nombre_inversor = nombreInput.value;
-      const usuario = usuarioInput.value;
+      const ciudad = ciudadInput.value;
+      const pais = paisInput.value;
       
       try {
         const response = await axios.post(`http://localhost:5000/api/auth/crear-inversor/${userId}`, {
-        nombre_inversor,
-        perfil_inversion,
-        usuario
+          nombre_inversor,
+          perfil_inversion,
+          ciudad,
+          pais
         });
 
-        
         if (response.status === 201) {
           window.location.href = 'http://localhost:3000/';
         } else {
           alert('Hubo un problema al completar el registro.');
         }
       } catch (error) {
-    console.error('Error en el registro:', error.response || error.message);
-    alert('Error al conectarse al servidor: ' + (error.response ? error.response.data : error.message));
-}
-
+        console.error('Error en el registro:', error.response || error.message);
+        alert('Error al conectarse al servidor: ' + (error.response ? error.response.data : error.message));
+      }
     });
+
+    // Autocompletado de Ciudad y País
+    const initializeAutocomplete = () => {
+      // Suponiendo que usas un API para el autocompletado
+      const countryInput = document.getElementById('pais');
+      const cityInput = document.getElementById('ciudad');
+
+      // Aquí iría tu lógica para obtener y mostrar las sugerencias para país y ciudad
+      // Por ejemplo, podrías utilizar una librería o realizar peticiones a un servicio externo
+      // Por simplicidad, esto es solo un esqueleto de la funcionalidad
+      const countries = ["España", "México", "Argentina", "Colombia", "Chile"];
+      const cities = ["Madrid", "Barcelona", "Valencia", "Buenos Aires", "Bogotá"];
+
+      // Autocompletado para el país
+      countryInput.addEventListener('input', () => {
+        // Filtrar los países basados en la entrada
+        // Mostrar las sugerencias en un dropdown o similar
+      });
+
+      // Autocompletado para la ciudad
+      cityInput.addEventListener('input', () => {
+        // Filtrar las ciudades basadas en la entrada
+        // Mostrar las sugerencias en un dropdown o similar
+      });
+    };
+
+    initializeAutocomplete();
+
   </script>
 </Layout>
 

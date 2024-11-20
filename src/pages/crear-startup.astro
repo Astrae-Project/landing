@@ -20,7 +20,8 @@ import Layout from '../layouts/Layout-registro.astro';
       </div>
       <!-- Paso 2: Usuario -->
       <div id="step2" class="step" style="display: none;">
-        <input id="usuario" type="text" name="usuario" placeholder="Usuario" required>
+        <input id="ciudad" type="text" name="ciudad" placeholder="Ciudad" required autocomplete="off">
+        <input id="pais" type="text" name="pais" placeholder="País" required autocomplete="off">
         <button id="next2" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
       </div>
       <!-- Paso 3: Sector -->
@@ -122,7 +123,8 @@ import Layout from '../layouts/Layout-registro.astro';
     const button = document.getElementById('button-role');
   
     const nombreInput = document.getElementById('nombre');
-    const usuarioInput = document.getElementById('usuario');
+    const ciudadInput = document.getElementById('ciudad');
+    const paisInput = document.getElementById('pais');
     const sectorInput = document.getElementById('sector');
     const plantillaInput = document.getElementById('plantilla');
     const porcentajeInput = document.getElementById('porcentaje');
@@ -162,11 +164,11 @@ import Layout from '../layouts/Layout-registro.astro';
       });
   
       next2.addEventListener('click', function () {
-        if (usuarioInput.value) {
+        if (ciudadInput.value && paisInput.value) {
           step2.style.display = 'none';
           step3.style.display = 'block';
         } else {
-          alert('Por favor, ingresa tu nombre de usuario.');
+          alert('Por favor, ingresa tu país y tu ciudad.');
         }
       });
   
@@ -223,7 +225,8 @@ import Layout from '../layouts/Layout-registro.astro';
         // Obtener los valores de los campos del formulario
         const estado_financiacion = document.querySelector('.financiation-card.selected')?.getAttribute('data-value');
         const nombre_startup = nombreInput.value;
-        const usuario = usuarioInput.value;
+        const ciudad = ciudadInput.value;
+        const pais = paisInput.value;
         const sector = sectorInput.value;
         const plantilla = plantillaInput.value;
         const porcentaje = porcentajeInput.value;
@@ -231,7 +234,8 @@ import Layout from '../layouts/Layout-registro.astro';
         // Log de todos los valores
         console.log('Valores enviados:', {
             nombre_startup,
-            usuario,
+            ciudad,
+            pais,
             sector,
             plantilla,
             porcentaje,
@@ -242,7 +246,8 @@ import Layout from '../layouts/Layout-registro.astro';
         // Enviar la solicitud POST con axios
         const response = await axios.post(`http://localhost:5000/api/auth/crear-startup/${userId}`, {
             nombre_startup,
-            usuario,
+            ciudad,
+            pais,
             sector,
             plantilla,
             porcentaje,
@@ -263,8 +268,6 @@ import Layout from '../layouts/Layout-registro.astro';
   });
 });
   </script>
-  
-  
 </Layout>
 
 <style>

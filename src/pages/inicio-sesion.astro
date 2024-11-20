@@ -70,13 +70,7 @@ import Layout from '../layouts/Layout-registro.astro';
                 // Verifica el contenido de la respuesta
                 console.log('Response data:', response.data);
     
-                if (response.status === 200) {
-                    // Guardar token en cookies
-                    document.cookie = `token=${response.data.token}; path=/; ${process.env.NODE_ENV === 'production' ? 'secure; ' : ''}HttpOnly`;
-                    
-                    // Configurar y almacenar el refresh token en la cookie
-                    document.cookie = `refreshToken=${response.data.refreshToken}; path=/; ${process.env.NODE_ENV === 'production' ? 'secure; ' : ''}HttpOnly`;
-                    
+                if (response.status === 200) {                    
                     window.location.href = 'http://localhost:3000/'; // Redirigir al dashboard
                 } 
                 else {
@@ -243,7 +237,7 @@ import Layout from '../layouts/Layout-registro.astro';
     }
 
     .texto-abajo{
-        margin-top: 300px;
+        margin-top: 23%;
         text-align: center;
         position: relative;
         font-size: 13px;

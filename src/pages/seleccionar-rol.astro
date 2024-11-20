@@ -4,10 +4,10 @@ import Layout from '../layouts/Layout-registro.astro';
 
 <Layout title="Plantilla">
   <body>
-    <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
-    <img id="fondo" src="Imagenes/Registro/Fondo.svg">
+    <img id="estrellas" src="Imagenes/Registro/Estrellas.png" />
+    <img id="fondo" src="Imagenes/Registro/Fondo.svg" />
     <div id="blur"></div>
-    <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg"></a>
+    <a id="cerrar" href="/index.html"><img id="x" src="Imagenes/Registro/x.svg" /></a>
     <header>
       <h1>Selecciona tu Rol</h1>
     </header>
@@ -15,8 +15,8 @@ import Layout from '../layouts/Layout-registro.astro';
       <div id="step3" class="perfil-container">
         <div class="role-card" data-value="inversor">
           <lord-icon
-          src="https://cdn.lordicon.com/bgebyztw.json"
-          trigger="hover"
+            src="https://cdn.lordicon.com/bgebyztw.json"
+            trigger="hover"
             colors="primary:#aaaaaa,secondary:#aaaaaa"
             style="width:100px;height:100px">
           </lord-icon>
@@ -31,51 +31,46 @@ import Layout from '../layouts/Layout-registro.astro';
           </lord-icon>
           <p id="texto2">Startup</p>
         </div>
-      </div>   
+      </div>
     </form>
   </body>
 
   <script>
     import axios from "axios";
     import { jwtDecode } from "jwt-decode";
-    
-    const rolCards = document.querySelectorAll('.role-card');
-    
-    rolCards.forEach(card => {
-      card.addEventListener('click', async function () {
-        const rol = card.getAttribute('data-value');
-        
-        try {    
-          // Acceder al ID
-          const userId = localStorage.getItem('userId');
-    
-          if (!userId) {
-            console.error('ID del usuario no encontrado en el usuario.');
-            return;
-          }
-    
-          // Aquí se envía la solicitud al backend
-          const response = await axios.post(`http://localhost:5000/api/auth/seleccionar-rol/${userId}`, {
+  
+    document.addEventListener('DOMContentLoaded', function () {
+      const rolCards = document.querySelectorAll('.role-card');
+      
+      rolCards.forEach(card => {
+        card.addEventListener('click', async function () {
+          const rol = card.getAttribute('data-value');
+          
+        try {
+            // Aquí se envía la solicitud al backend
+            const response = await axios.post(`http://localhost:5000/api/auth/seleccionar-rol`, {
             rol
           });
-    
-          if (response.status === 200) {
-            // Redirige según el perfil seleccionado
-            if (rol === 'inversor') {
-              window.location.href = '/crear-inversor';
-            } else if (rol === 'startup') {
-              window.location.href = '/crear-startup';
+           
+            if (response.status === 200) {
+              // Redirige según el perfil seleccionado
+              if (rol === 'inversor') {
+                window.location.href = '/crear-inversor';
+              } else if (rol === 'startup') {
+                window.location.href = '/crear-startup';
+              }
+            } else {
+              alert('Hubo un problema al guardar el rol.');
             }
-          } else {
-            alert('Hubo un problema al guardar el rol.');
+          } catch (error) {
+            console.error('Error al seleccionar rol:', error);
+            alert('Error al seleccionar rol.');
           }
-        } catch (error) {
-          console.error('Error al seleccionar rol:', error);
-          alert('Error al seleccionar rol.');
-        }
+        });
       });
     });
-    </script>    
+  </script>
+  
 </Layout>
 
 <style>

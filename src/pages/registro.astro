@@ -14,24 +14,42 @@ import Layout from '../layouts/Layout-registro.astro';
         </header>
         <form id="registerForm" method="post">
             <input id="email" type="email" placeholder="Introduce email" required>
-            <div id="password-container" style="display: none;">
-                <input id="password" type="password" placeholder="Contraseña" required> 
+            
+            <!-- Contenedor para el Username -->
+            <div id="username-container" class="input-container" style="display: none;" >
+                <input id="username" type="text" placeholder="Introduce nombre de usuario">
+            </div>
+    
+            <!-- Contenedor para la Contraseña -->
+            <div id="password-container" class="input-container" style="display: none;">
+                <input id="password" type="password" placeholder="Contraseña"> 
                 <span id="toggle-password" style="cursor: pointer;">
                     <img id="eye-icon" src="Imagenes/Registro/Ojo cerrado.png" alt="Mostrar/Ocultar Contraseña">
                 </span>
             </div>
+    
             <button id="submit-btn" type="submit"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
         </form>
-        <!--<button id="iniciar" type="button"><img id="google" src="Imagenes/Registro/Inicia sesion con google.svg"></button> -->
+        
         <p class="texto-abajo"><span id="regular">Si ya te has registrado previamente,</span><a href="/inicio-sesion" id="texto-abajo">Inicia Sesión</a></p>
     </body>
+    
     <script>
         import axios from 'axios';
     
         const registerForm = document.getElementById('registerForm');
         const emailInput = document.getElementById('email');
+        const usernameContainer = document.getElementById('username-container');
+        const usernameInput = document.getElementById('username');
         const passwordContainer = document.getElementById('password-container');
         const passwordInput = document.getElementById('password');
+    
+        // Función para mostrar solo el contenedor especificado
+        function showOnly(container) {
+            usernameContainer.style.display = 'none';
+            passwordContainer.style.display = 'none';
+            container.style.display = 'block';
+        }
     
         registerForm.addEventListener('submit', async function (event) {
             event.preventDefault();
@@ -39,62 +57,49 @@ import Layout from '../layouts/Layout-registro.astro';
             // Obtener el email
             const email = emailInput.value;
     
-            // Verificar si el campo de contraseña está visible
-            if (passwordContainer.style.display === 'none') {
-                // Validar que se haya ingresado un email
-                if (!email) {
-                    alert('Por favor, introduce un email válido');
-                    return;
-                }
-    
-                // Mostrar el campo de la contraseña
-                passwordContainer.style.display = 'block';
+            // Verificar si debe mostrarse el campo de contraseña
+            if (passwordContainer.style.display === 'none' && email) {
+                // Mostrar solo el contenedor de contraseña
+                showOnly(passwordContainer);
+                passwordInput.required = true;
                 return;
             }
     
-            // Obtener la contraseña
-            const password = passwordInput.value;
-    
-            // Validar que se haya ingresado una contraseña
-            if (!password) {
-                alert('Por favor, introduce una contraseña');
+            // Verificar si debe mostrarse el campo de nombre de usuario
+            if (usernameContainer.style.display === 'none' && passwordInput.value) {
+                // Mostrar solo el contenedor de nombre de usuario
+                showOnly(usernameContainer);
+                usernameInput.required = true;
                 return;
             }
     
-            // Enviar los datos al servidor
-            try {
-                const response = await axios.post('http://localhost:5000/api/auth/registrar', {
-                    email,
-                    password
-                });
+            // Obtener el nombre de usuario
+            const username = usernameInput.value;
     
-                // Verificar la respuesta y redirigir si el registro fue exitoso
-                if (response.status === 201) {
-                    console.log('Registro exitoso:', response.data);
-                    // Log del token si se encuentra en la respuesta
-                    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
-                    console.log('Token guardado en la cookie:', token ? token.split('=')[1] : 'No se encontró el token');
-
-                    // Eliminamos localStorage para userId y utilizamos cookies en su lugar
-                    document.cookie = `userId=${response.data.userId}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`;
-
-                    console.log('Usuario registrado, ID guardado:', response.data.userId);
-
-                    // Redirigir a la página de selección de rol
-                    window.location.href = 'http://localhost:4321/seleccionar-rol';
-                } else {
-                    console.error('Error en el registro:', response.data);
-                    alert('Error en el registro, por favor intenta nuevamente.');
+            // Verificar si todos los campos están completos antes de enviar
+            if (usernameContainer.style.display === 'block' && username && passwordInput.value) {
+                // Enviar los datos al servidor
+                try {
+                    const response = await axios.post('http://localhost:5000/api/auth/registrar', {
+                        email,
+                        username,
+                        password: passwordInput.value
+                    });
+    
+                    if (response.status === 201) {
+                        console.log('Registro exitoso:', response.data);
+                        window.location.href = 'http://localhost:4321/seleccionar-rol';
+                    } else {
+                        console.error('Error en el registro:', response.data);
+                        alert('Error en el registro, por favor intenta nuevamente.');
+                    }
+                } catch (error) {
+                    console.error('Error en la solicitud:', error);
+                    alert('Error al conectarse al servidor');
                 }
-
-            } catch (error) {
-                console.error('Error en la solicitud:', error);
-                alert('Error al conectarse al servidor');
             }
         });
     </script>
-    
-    
     
 </Layout>
 
@@ -189,15 +194,16 @@ import Layout from '../layouts/Layout-registro.astro';
         caret-color: rgb(71, 159, 250);
     }
 
-    input#password{
+    input#password, #username{
         width: 78%;
+        height: 92%;
     }
 
     input:focus {
         outline: none;
     }
 
-    div#password-container {
+    div#password-container, #username-container {
         position: relative;
         width: inherit;
     }
@@ -248,7 +254,7 @@ import Layout from '../layouts/Layout-registro.astro';
     }
 
     .texto-abajo{
-        margin-top: 300px;
+        margin-top: 23%;
         text-align: center;
         position: relative;
         font-size: 13px;
