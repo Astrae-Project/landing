@@ -218,7 +218,6 @@ import Layout from '../layouts/Layout-registro.astro';
     event.preventDefault();
 
     try {
-        // Intentar obtener el token de las cookies
         const userIdCookie = document.cookie.split('; ').find(row => row.startsWith('userId='));
         const userId = userIdCookie ? userIdCookie.split('=')[1] : null;
 
