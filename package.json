@@ -25,6 +25,7 @@
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "sonner": "^1.7.1",
     "styled-components": "^6.1.13",
     "tailwindcss": "^3.4.12",
     "typescript": "^5.6.2"
