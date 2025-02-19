@@ -36,8 +36,8 @@ import Layout from '../layouts/Layout-registro.astro';
   </body>
 
   <script>
-    import axios from "axios";
     import { jwtDecode } from "jwt-decode";
+    import customAxios from "../services/api";
   
     document.addEventListener('DOMContentLoaded', function () {
       const rolCards = document.querySelectorAll('.role-card');
@@ -48,7 +48,7 @@ import Layout from '../layouts/Layout-registro.astro';
           
         try {
             // Aquí se envía la solicitud al backend
-            const response = await axios.post(`http://localhost:5000/api/auth/seleccionar-rol`, {
+            const response = await customAxios.post(`http://localhost:5000/api/auth/seleccionar-rol`, {
             rol
           });
            

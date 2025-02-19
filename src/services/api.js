@@ -1,39 +1,46 @@
-// src/services/api/customAxios.js
 import axios from "axios";
 
-// Crear instancia de Axios con configuración personalizada
+// Crear una instancia personalizada de axios
 const customAxios = axios.create({
-  withCredentials: true, // Para enviar cookies en solicitudes CORS
+  baseURL: "http://localhost:5000/api",
+  withCredentials: true, // Asegúrate de que las cookies se envíen
 });
 
-// Interceptor de respuestas
 customAxios.interceptors.response.use(
-  (response) => response, // Manejar respuestas exitosas
-  async function (error) {
-    const originalRequest = error.config;
-
-    // Si el error es 403 (token inválido) y no se ha reintentado aún
-    if (error.response && error.response.status === 403 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        // Solicitar nuevo token al servidor
-        await customAxios.get(`http://localhost:5000/api/auth/refrescar-token`, {
-          withCredentials: true, // Importante para enviar y recibir cookies
-        });
-
-        // Reenviar la solicitud original
-        return customAxios(originalRequest);
-      } catch (refreshError) {
-        console.error("Token refresh failed:", refreshError);
-
-        // Opcional: Redirigir al usuario al inicio de sesión o manejar el error
-        return Promise.reject(refreshError);
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config;
+  
+      if (error.response?.status === 403 || error.response?.status === 401 || error.response?.status === 402 || error.response?.status === 500 && !originalRequest._retry) {
+        originalRequest._retry = true;
+  
+        try {
+          await generateRefreshToken(); // Refrescar el token
+  
+          return customAxios(originalRequest); // Reintentar la solicitud original
+        } catch (refreshError) {
+          console.error('Error al refrescar el token:', refreshError);
+          // Si no se puede refrescar, podrías redirigir al login o manejar el error de otra forma
+        }
       }
+  
+      return Promise.reject(error); // Rechazar el error si no se puede refrescar el token
     }
+  );  
 
-    return Promise.reject(error);
-  }
-);
-
+  export const generateRefreshToken = async () => {
+    try {
+      const response = await customAxios.post("http://localhost:5000/api/auth/refrescar-token");
+   
+      if (response.data.accessToken) {
+        } else {
+        console.error('No se recibió un nuevo access token');
+      }
+    } catch (error) {
+      console.error("Error al refrescar el token:", error);
+      // Si la operación falla, lanzamos un error o podríamos manejar el error (ej. redirigir al login)
+      throw new Error('Error al refrescar el token');
+    }
+  };
+  
 export default customAxios;
