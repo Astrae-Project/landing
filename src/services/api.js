@@ -11,7 +11,7 @@ customAxios.interceptors.response.use(
     async (error) => {
       const originalRequest = error.config;
   
-      if (error.response?.status === 403 || error.response?.status === 401 || error.response?.status === 402 || error.response?.status === 500 && !originalRequest._retry) {
+      if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
   
         try {
@@ -20,7 +20,6 @@ customAxios.interceptors.response.use(
           return customAxios(originalRequest); // Reintentar la solicitud original
         } catch (refreshError) {
           console.error('Error al refrescar el token:', refreshError);
-          // Si no se puede refrescar, podrías redirigir al login o manejar el error de otra forma
         }
       }
   
