@@ -1,0 +1,571 @@
+---
+import Layout from '../layouts/Layout-registro.astro';
+---
+
+<Layout title="Waitlist">
+    <body>
+        <img id="estrellas" src="Imagenes/Registro/Estrellas.png">
+        <img id="fondo" src="Imagenes/Registro/Fondo.svg">
+        <div id="blur"></div>
+        <a id="cerrar" href="/"><img id="x" src="Imagenes/Registro/x.svg"></a>
+        <header>
+            <h1>Únete a la Revolución</h1>
+            <p id="subtexto-principal">Sé de los primeros en acceder a la plataforma que está transformando la conexión entre startups e inversores</p>
+        </header>
+        <form id="waitlistForm">
+            <div id="email-container" class="input-container">
+                <input id="email" type="email" placeholder="Introduce tu email" required>
+                <button type="button" class="next-btn"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+            </div>
+            
+            <div id="name-container" class="input-container" style="display: none;">
+                <input id="name" type="text" placeholder="¿Cómo te llamas? (opcional)">
+                <button type="button" class="next-btn"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
+            </div>
+
+            <div id="user-type-container" class="user-type-step" style="display: none;">
+                <p class="user-type-title">¿Qué te describe mejor?</p>
+                <div class="user-type-options">
+                    <label class="user-type-option">
+                        <input type="radio" name="userType" value="startup" required>
+                        <span>Startup</span>
+                    </label>
+                    <label class="user-type-option">
+                        <input type="radio" name="userType" value="investor" required>
+                        <span>Inversor</span>
+                    </label>
+                </div>
+            </div>
+        </form>
+
+        <!-- Bubble Component -->
+        <div id="bubble" class="bubble-overlay" style="display: none;">
+            <div class="bubble-content">
+                <div class="mensaje-confirmacion">
+                    <svg id="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="currentColor"/>
+                    </svg>
+                    <h2 id="bubble-message"></h2>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        const waitlistForm = document.getElementById('waitlistForm');
+        const emailContainer = document.getElementById('email-container');
+        const emailInput = document.getElementById('email') as HTMLInputElement;
+        const nameContainer = document.getElementById('name-container');
+        const nameInput = document.getElementById('name') as HTMLInputElement;
+        const userTypeContainer = document.getElementById('user-type-container');
+        const blurElement = document.getElementById('blur');
+        const bubble = document.getElementById('bubble');
+        const bubbleMessage = document.getElementById('bubble-message');
+        const bubbleIcon = document.getElementById('icon');
+
+        // Variables globales
+        let selectedUserType: string | null = null;
+        const userTypeRadios = document.querySelectorAll('input[name="userType"]') as NodeListOf<HTMLInputElement>;
+
+        // Función para reiniciar el formulario
+        function resetForm() {
+            if (emailContainer) {
+                emailContainer.style.display = 'block';
+                emailContainer.classList.remove('blur-active');
+            }
+            if (nameContainer) {
+                nameContainer.style.display = 'none';
+                nameContainer.classList.remove('blur-active');
+            }
+            if (userTypeContainer) {
+                userTypeContainer.style.display = 'none';
+                userTypeContainer.classList.remove('blur-active');
+            }
+            if (emailInput) emailInput.value = '';
+            if (nameInput) nameInput.value = '';
+            if (blurElement) blurElement.classList.remove('blur-active');
+            selectedUserType = null;
+            userTypeRadios.forEach(radio => {
+                radio.checked = false;
+            });
+        }
+
+        // Event listener para el input de email
+        if (emailInput) {
+            emailInput.addEventListener('input', () => {
+                if (emailInput.value.length > 0 && blurElement) {
+                    blurElement.classList.add('blur-active');
+                } else if (blurElement) {
+                    blurElement.classList.remove('blur-active');
+                }
+            });
+        }
+
+        // Event listener para reiniciar al hacer clic fuera
+        document.addEventListener('click', (event) => {
+            const isClickInside = waitlistForm?.contains(event.target as Node);
+            if (!isClickInside) {
+                resetForm();
+            }
+        });
+
+        // Función para mostrar el siguiente campo y ocultar los anteriores
+        function showNextField(currentField: HTMLInputElement) {
+            if (currentField === emailInput) {
+                if (emailContainer) emailContainer.style.display = 'none';
+                if (nameContainer) nameContainer.style.display = 'block';
+                return;
+            }
+            if (currentField === nameInput) {
+                if (nameContainer) nameContainer.style.display = 'none';
+                if (userTypeContainer) userTypeContainer.style.display = 'flex';
+                return;
+            }
+        }
+
+        // Función para volver al campo anterior
+        function goBack(field: HTMLInputElement) {
+            if (field === nameInput) {
+                if (userTypeContainer) userTypeContainer.style.display = 'none';
+                if (nameContainer) nameContainer.style.display = 'block';
+            } else if (field === emailInput) {
+                if (nameContainer) nameContainer.style.display = 'none';
+                if (emailContainer) emailContainer.style.display = 'block';
+            }
+        }
+
+        // Función para mostrar el mensaje en la bubble
+        function showBubble(message: string, type: 'success' | 'error' = 'success') {
+            if (bubble && bubbleMessage && bubbleIcon) {
+                // Remover cualquier event listener previo
+                bubble.removeEventListener('click', handleBubbleClick);
+                
+                bubbleMessage.textContent = message;
+                bubbleIcon.style.color = type === 'success' ? 'rgb(68, 197, 68)' : 'rgba(222, 67, 67)';
+                bubble.style.display = 'flex';
+                
+                // Añadir el event listener para cerrar al hacer clic fuera
+                bubble.addEventListener('click', handleBubbleClick);
+            }
+        }
+
+        // Función para manejar el clic en la burbuja
+        function handleBubbleClick(e: MouseEvent) {
+            if (e.target === bubble && bubble) {
+                bubble.style.display = 'none';
+            }
+        }
+
+        // Event listeners para los botones de siguiente
+        document.querySelectorAll('.next-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const container = button.closest('.input-container');
+                const input = container?.querySelector('input');
+                if (input && input.value) {
+                    showNextField(input as HTMLInputElement);
+                }
+            });
+        });
+
+        // Event listeners para volver atrás
+        if (emailInput) {
+            emailInput.addEventListener('click', () => goBack(emailInput));
+        }
+        if (nameInput) {
+            nameInput.addEventListener('click', () => goBack(nameInput));
+        }
+
+        // Función para manejar la selección del tipo de usuario
+        function handleUserTypeSelection(event: Event) {
+            const target = event.target as HTMLInputElement;
+            if (target && target.value) {
+                selectedUserType = target.value;
+                submitForm();
+            }
+        }
+
+        // Añadir event listeners a los radio buttons
+        userTypeRadios.forEach(radio => {
+            radio.addEventListener('change', handleUserTypeSelection);
+        });
+
+        // Función para enviar el formulario
+        async function submitForm() {
+            if (!emailInput || !nameInput || !selectedUserType) {
+                showBubble('Faltan datos requeridos', 'error');
+                return;
+            }
+
+            const formData = {
+                correo: emailInput.value,
+                nombre: nameInput.value,
+                tipo_usuario: selectedUserType
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/api/waitlist', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Error al enviar el formulario');
+                }
+
+                showBubble(data.message);
+
+            } catch (error) {
+                showBubble(error instanceof Error ? error.message : 'Error desconocido', 'error');
+            }
+        }
+    </script>
+
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+        img#estrellas{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        img#fondo{
+            position: absolute;
+            align-self: center;
+            width: 100%;
+            height: 80%;
+            z-index: -2;
+        }
+
+        div#blur{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #0909129c;
+            backdrop-filter: blur(10px);
+            transition: z-index 0.1s ease;
+        }
+
+        div#blur.blur-active {
+            z-index: 2;
+        }
+
+        a#cerrar{
+            position: absolute;
+            left: 60px;
+            top: 60px;
+            z-index: 4;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 4px;
+            position: relative;
+            top: -20px;
+            z-index: 1;
+        }
+
+        h1{
+            position: relative;
+            text-align: center;
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            background: linear-gradient(150deg, #FFFFFF 0%, #fff 50%, #6B6B71 99%);
+            -webkit-background-clip: text;
+            color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        p#subtexto-principal{
+            position: relative;
+            font-size: clamp(12px, 3vw, 14px);
+            font-weight: 400;
+            line-height: 22px;
+            text-align: center;
+            color: #cbcbcb;
+            margin-top: 10px;
+            max-width: clamp(300px, 80vw, 400px);
+            padding: 0 20px;
+        }
+
+        form{
+            position: relative;
+            width: 100%;
+            max-width: clamp(280px, 80vw, 320px);
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .input-container {
+            width: 100%;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            box-shadow: rgba(0, 0, 0, 0.08) 1px 1px 1px inset;
+            backdrop-filter: blur(2px);
+            border-radius: 92px;
+            display: flex;
+            cursor: text;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: relative;
+            transition: all 0.3s ease;
+            z-index: 3;
+            right: 18px;
+            top: -20px;
+        }
+
+        .input-container:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        input{
+            width: calc(100% - 35px);
+            padding: 0;
+            color: rgb(255, 255, 255);
+            transition: color 0.3s;
+            border: none;
+            background: transparent;
+            color: rgb(255, 255, 255);
+            caret-color: rgb(71, 159, 250);
+            text-align: left;
+            font-size: clamp(12px, 3vw, 14px);
+            line-height: 44px;
+        }
+
+        input::placeholder {
+            text-align: left;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        input#name {
+            width: calc(100% - 35px);
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .next-btn {
+            background-color: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            width: 25px;
+            height: 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            padding: 0;
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .next-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .user-type-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 3;
+            min-height: 200px;
+        }
+
+        .user-type-title {
+            color: #cbcbcb;
+            font-size: clamp(12px, 3vw, 14px);
+            text-align: center;
+            margin: 0;
+        }
+
+        .user-type-options {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .user-type-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 12px 24px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .user-type-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-type-option input[type="radio"] {
+            width: auto;
+            margin: 0;
+            accent-color: #479FFA;
+        }
+
+        .user-type-option span {
+            color: #fff;
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s !important;
+            -webkit-text-fill-color: #fff !important;
+            caret-color: #479FFA !important;
+            background-color: transparent !important;
+        }
+
+        input:-webkit-autofill::first-line {
+            color: #fff !important;
+        }
+
+        /* Bubble Styles */
+        .bubble-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999999999999;
+            animation: fadeIn 1s ease-in-out;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .bubble-overlay[style*="display: flex"] {
+            opacity: 1;
+        }
+
+        .bubble-content {
+            background: #090912;
+            min-width: clamp(250px, 60vw, 35%);
+            width: auto;
+            max-height: 850px;
+            padding: 20px;
+            border-radius: 15px;
+            transform: scale(0.8);
+            animation: popIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            overflow: hidden;
+            margin-left: clamp(0px, 10vw, 80px);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .bubble-content[style*="display: flex"] {
+            opacity: 1;
+        }
+
+        .mensaje-confirmacion {
+            display: flex;
+            text-align: center;
+            padding: clamp(20px, 5vw, 50px);
+            padding-bottom: 30px;
+            font-size: clamp(14px, 3vw, 1.1rem);
+            color: #e9e9e9;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            animation: fadeInText 1s ease-in-out forwards;
+            animation-delay: 0.5s;
+        }
+
+        #icon {
+            position: absolute;
+            width: 21px;
+            height: 21px;
+            top: 40px;
+            opacity: 0;
+            animation: fadeInIcon 1s ease-in-out forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                background: rgba(0, 0, 0, 0);
+            }
+            to {
+                background: rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInIcon {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style> 
