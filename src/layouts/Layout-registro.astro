@@ -38,73 +38,85 @@ const { title } = Astro.props;
     }
 </style>
 
+<!-- Script solo para páginas de login/registro -->
 <script>
-    import axios from "axios";
-    axios.defaults.withCredentials = true;
-    
-    const emailInput = document.getElementById('email');
-    const passwordInput = document.getElementById('password');
-    const submitBtn = document.getElementById('submit-btn');
-    const passwordContainer = document.getElementById('password-container');
-    const togglePassword = document.getElementById('toggle-password');
-    const eyeIcon = document.getElementById('eye-icon');
-    const blurDiv = document.getElementById('blur');
+    // Solo ejecutar este script si estamos en una página de login/registro
+    if (window.location.pathname.includes('/login') || window.location.pathname.includes('/registro')) {
+        
+        const emailInput = document.getElementById('email') as HTMLInputElement;
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const submitBtn = document.getElementById('submit-btn');
+        const passwordContainer = document.getElementById('password-container');
+        const togglePassword = document.getElementById('toggle-password');
+        const eyeIcon = document.getElementById('eye-icon') as HTMLImageElement;
+        const blurDiv = document.getElementById('blur');
 
-    emailInput.addEventListener('input', () => {
-        if (emailInput.value !== '') {
-            blurDiv.classList.add('blur-active');
-        } else {
-            blurDiv.classList.remove('blur-active');
+        if (emailInput && blurDiv) {
+            emailInput.addEventListener('input', () => {
+                if (emailInput.value !== '') {
+                    blurDiv.classList.add('blur-active');
+                } else {
+                    blurDiv.classList.remove('blur-active');
+                }
+            });
         }
-    });
 
- // Función para validar el formato del email
- function esEmailValido(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
+        // Función para validar el formato del email
+        function esEmailValido(email: string): boolean {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        if (submitBtn && emailInput && passwordContainer && passwordInput && blurDiv) {
+            // Manejar el clic en el botón de envío
+            submitBtn.addEventListener('click', function() {
+                const emailValue = emailInput.value.trim();
+
+                if (esEmailValido(emailValue)) {
+                    // Oculta el campo de email y muestra el de contraseña
+                    emailInput.style.display = 'none';
+                    passwordContainer.style.display = 'flex';
+
+                    // Mover el foco al campo de contraseña
+                    passwordInput.focus();
+
+                    // Cambiar el z-index del blur para mantener el input de contraseña encima
+                    blurDiv.classList.add('blur-active');
+                } else {
+                    alert('Por favor, introduce un email válido.');
+                }
+            });
+
+            // Detectar clics fuera del campo de contraseña para resetear
+            document.addEventListener('click', function(event) {
+                const target = event.target as HTMLElement;
+                if (passwordContainer.style.display === 'flex' && 
+                    !passwordContainer.contains(target) && 
+                    submitBtn && 
+                    !submitBtn.contains(target)) {
+                    // Resetear el formulario
+                    passwordContainer.style.display = 'none';
+                    passwordInput.value = '';
+                    emailInput.style.display = 'block';
+                    emailInput.value = '';
+                    blurDiv.classList.remove('blur-active');
+                    emailInput.focus();
+                }
+            });
+        }
+
+        if (togglePassword && passwordInput && eyeIcon) {
+            // Alternar la visibilidad de la contraseña
+            togglePassword.addEventListener('click', function() {
+                const passwordFieldType = passwordInput.getAttribute('type');
+                if (passwordFieldType === 'password') {
+                    passwordInput.setAttribute('type', 'text');
+                    eyeIcon.src = 'Imagenes/Registro/Ojo abierto.png';
+                } else {
+                    passwordInput.setAttribute('type', 'password');
+                    eyeIcon.src = 'Imagenes/Registro/Ojo cerrado.png';
+                }
+            });
+        }
     }
-
-    // Manejar el clic en el botón de envío
-    submitBtn.addEventListener('click', function() {
-        const emailValue = emailInput.value.trim();
-
-        if (esEmailValido(emailValue)) {
-            // Oculta el campo de email y muestra el de contraseña
-            emailInput.style.display = 'none';
-            passwordContainer.style.display = 'flex';
-
-            // Mover el foco al campo de contraseña
-            passwordInput.focus();
-
-            // Cambiar el z-index del blur para mantener el input de contraseña encima
-            blurDiv.classList.add('blur-active');
-        } else {
-            alert('Por favor, introduce un email válido.');
-        }
-    });
-
-    // Detectar clics fuera del campo de contraseña para resetear
-    document.addEventListener('click', function(event) {
-        if (passwordContainer.style.display === 'flex' && !passwordContainer.contains(event.target) && !submitBtn.contains(event.target)) {
-            // Resetear el formulario
-            passwordContainer.style.display = 'none';
-            passwordInput.value = '';
-            emailInput.style.display = 'block';
-            emailInput.value = '';
-            blurDiv.classList.remove('blur-active');
-            emailInput.focus();
-        }
-    });
-
-    // Alternar la visibilidad de la contraseña
-    togglePassword.addEventListener('click', function() {
-        const passwordFieldType = passwordInput.getAttribute('type');
-        if (passwordFieldType === 'password') {
-            passwordInput.setAttribute('type', 'text');
-            eyeIcon.src = 'Imagenes/Registro/Ojo abierto.png'; // Cambia a un icono de ojo abierto
-        } else {
-            passwordInput.setAttribute('type', 'password');
-            eyeIcon.src = 'Imagenes/Registro/Ojo cerrado.png'; // Cambia a un icono de ojo cerrado
-        }
-    });
 </script>

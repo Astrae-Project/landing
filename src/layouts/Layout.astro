@@ -25,7 +25,7 @@ const { title } = Astro.props;
         <a href="/index.html" id="logo">
           <img src="Imagenes/Navbar/Logo.svg" alt="Logo" />
         </a>
-        <a href="/inicio-sesion" id="usuario">
+        <a href="/inicio-sesion" id="usuario" style="display: none;">
           <img src="Imagenes/Navbar/Inversor.svg" alt="Usuario" />
         </a>
       </nav>
@@ -157,11 +157,10 @@ const { title } = Astro.props;
     display: flex;
     align-items: center;
     padding: 10px 10px;
-    padding-right: 80%; /* Aumentar el relleno (padding) para que el rectángulo sea más grande */
     border-radius: 8px;
     transition: background-color 0.3s;
     cursor: pointer;
-    width: calc(100% - 4px); /* Ajustar el ancho para que ocupe casi todo el contenedor */
+    width: 94%; /* Ajustar el ancho para que ocupe casi todo el contenedor */
 }
 
   #menu-desplegable li:hover {

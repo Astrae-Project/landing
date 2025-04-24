@@ -32,6 +32,34 @@ import Layout from '../layouts/Layout-registro.astro';
         const emailInput = document.getElementById('email');
         const passwordContainer = document.getElementById('password-container');
         const passwordInput = document.getElementById('password');
+        const blurElement = document.getElementById('blur');
+
+        // Función para reiniciar el formulario
+        function resetForm() {
+            if (emailInput) emailInput.value = '';
+            if (passwordInput) passwordInput.value = '';
+            if (passwordContainer) passwordContainer.style.display = 'none';
+            if (blurElement) blurElement.classList.remove('blur-active');
+        }
+
+        // Event listener para el input de email
+        if (emailInput) {
+            emailInput.addEventListener('input', () => {
+                if (emailInput.value.length > 0 && blurElement) {
+                    blurElement.classList.add('blur-active');
+                } else if (blurElement) {
+                    blurElement.classList.remove('blur-active');
+                }
+            });
+        }
+
+        // Event listener para reiniciar al hacer clic fuera
+        document.addEventListener('click', (event) => {
+            const isClickInside = loginForm?.contains(event.target as Node);
+            if (!isClickInside) {
+                resetForm();
+            }
+        });
     
         // Función para manejar el formulario de inicio de sesión
         loginForm.addEventListener('submit', async function (event) {
@@ -136,7 +164,7 @@ import Layout from '../layouts/Layout-registro.astro';
         -webkit-background-clip: text;
         color: transparent;
         background-clip: text;
-        margin-top: 275px;
+        margin-top: 315px;
     }
 
     p#subtexto-principal{
@@ -148,6 +176,7 @@ import Layout from '../layouts/Layout-registro.astro';
         color: #9292ad;
         margin-top: -20px;
         margin-bottom: 22px;
+        padding: 0 20px;
     }
     
     form{
@@ -164,6 +193,7 @@ import Layout from '../layouts/Layout-registro.astro';
         cursor: text;
         align-self: center;
         z-index: 4;
+        margin: 0 auto;
     }
 
     input{
@@ -176,6 +206,7 @@ import Layout from '../layouts/Layout-registro.astro';
         background: transparent;
         color: rgb(255, 255, 255);
         caret-color: rgb(71, 159, 250);
+        font-size: 14px;
     }
 
     input#password{
@@ -237,11 +268,12 @@ import Layout from '../layouts/Layout-registro.astro';
     }
 
     .texto-abajo{
-        margin-top: 23%;
+        margin-top: 300px;
         text-align: center;
         position: relative;
         font-size: 13px;
         z-index: 4;
+        padding: 0 20px;
     }
 
     span#regular{
@@ -263,5 +295,59 @@ import Layout from '../layouts/Layout-registro.astro';
 
     a#texto-abajo:hover{
         text-decoration: underline;
+    }
+
+    input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s !important;
+            -webkit-text-fill-color: #fff !important;
+            caret-color: #479FFA !important;
+            background-color: transparent !important;
+        }
+
+        input:-webkit-autofill::first-line {
+            color: #fff !important;
+        }
+
+    @media screen and (max-width: 768px) {
+        h1 {
+            font-size: clamp(24px, 5vw, 32px);
+        }
+
+        p#subtexto-principal {
+            font-size: clamp(12px, 3vw, 14px);
+            line-height: clamp(20px, 4vw, 24px);
+            margin-top: clamp(-10px, -2vw, -20px);
+            margin-bottom: clamp(15px, 3vw, 22px);
+            padding: 0 clamp(10px, 5vw, 20px);
+            max-width: clamp(280px, 80vw, 400px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        form {
+            width: clamp(280px, 80vw, 320px);
+            height: clamp(40px, 8vw, 44px);
+            border-radius: clamp(80px, 20vw, 92px);
+            padding-left: clamp(15px, 4vw, 21px);
+        }
+
+        input {
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        .texto-abajo {
+            font-size: clamp(12px, 3vw, 13px);
+            padding: 0 clamp(10px, 5vw, 20px);
+            max-width: clamp(280px, 80vw, 400px);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        a#texto-abajo {
+            font-size: clamp(12px, 3vw, 13px);
+        }
     }
 </style>
