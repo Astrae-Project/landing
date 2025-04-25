@@ -22,23 +22,54 @@ import Layout from '../layouts/Layout-registro.astro';
             </div>            
             <button id="submit-btn" type="submit"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
         </form>
-        <!--<button id="iniciar" type="button"><img id="google" src="Imagenes/Registro/Inicia sesion con google.svg"></button> -->
+        <!-- <a id="iniciar" href="https://dev-3cukw7bzrlcixy2o.us.auth0.com/authorize?response_type=code&client_id=IFvhehTi8BtAMwRD9QLXi0AKnNIjTraf&redirect_uri=http://localhost:5000/api/auth/callback&scope=openid%20profile%20email&connection=google-oauth2">
+            <img id="google" src="Imagenes/Registro/Inicia sesion con google.svg" alt="Inicia sesión con Google">
+        </a> -->
         <p class="texto-abajo"><span id="regular">¿No tienes cuenta todavía?</span><a href="/registro" id="texto-abajo">Regístrate</a></p>
     </body>
     <script>
         import axios from 'axios';
     
-        const loginForm = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const passwordContainer = document.getElementById('password-container');
-        const passwordInput = document.getElementById('password');
-        const blurElement = document.getElementById('blur');
+        // Debug info to console
+        console.log("Login script initializing...");
+    
+        const loginForm = document.getElementById('loginForm') as HTMLFormElement;
+        const emailInput = document.getElementById('email') as HTMLInputElement;
+        const passwordContainer = document.getElementById('password-container') as HTMLDivElement;
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const blurElement = document.getElementById('blur') as HTMLDivElement;
+        const togglePassword = document.getElementById('toggle-password') as HTMLSpanElement;
+        const eyeIcon = document.getElementById('eye-icon') as HTMLImageElement;
+        const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+        // Check if elements were found
+        console.log("Form elements found:", {
+            loginForm: !!loginForm,
+            emailInput: !!emailInput,
+            passwordContainer: !!passwordContainer,
+            passwordInput: !!passwordInput,
+            submitBtn: !!submitBtn
+        });
+
+        // Añadir evento para mostrar/ocultar contraseña
+        if (togglePassword && passwordInput && eyeIcon) {
+            togglePassword.addEventListener('click', () => {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.src = 'Imagenes/Registro/Ojo abierto.png';
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.src = 'Imagenes/Registro/Ojo cerrado.png';
+                }
+            });
+        }
 
         // Función para reiniciar el formulario
         function resetForm() {
             if (emailInput) emailInput.value = '';
             if (passwordInput) passwordInput.value = '';
             if (passwordContainer) passwordContainer.style.display = 'none';
+            if (emailInput) emailInput.style.display = 'block'; // Ensure email is visible
             if (blurElement) blurElement.classList.remove('blur-active');
         }
 
@@ -60,35 +91,86 @@ import Layout from '../layouts/Layout-registro.astro';
                 resetForm();
             }
         });
-    
-        // Función para manejar el formulario de inicio de sesión
-        loginForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
-    
-            const email = emailInput.value;
-            
-            // Verificar si el campo de contraseña está visible
-            if (passwordContainer.style.display === 'none') {
-                // Validar que se haya ingresado un email
-                if (!email) {
-                    alert('Por favor, introduce un email válido');
+        
+        // Alternative approach using the submit button click instead of form submit
+        // This helps bypass potential Auth0 form submission interception
+        if (submitBtn && emailInput && passwordContainer) {
+            submitBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                console.log("Submit button clicked");
+                
+                const email = emailInput.value;
+                console.log("Email value:", email);
+                
+                // Check if password is visible
+                const passwordContainerDisplay = window.getComputedStyle(passwordContainer).display;
+                console.log("Password container display:", passwordContainerDisplay);
+                
+                if (passwordContainerDisplay === 'none') {
+                    // Show password field when email is entered
+                    console.log("Showing password field");
+                    emailInput.style.display = 'none';
+                    passwordContainer.style.display = 'block';
                     return;
                 }
                 
-                // Mostrar el campo de la contraseña
-                passwordContainer.style.display = 'block';
-                return;
-            }
-        
-            // Obtener la contraseña
-            const password = passwordInput.value;
-        
-            // Validar que se haya ingresado una contraseña
-            if (!password) {
-                alert('Por favor, introduce una contraseña');
-                return;
-            }
+                // Handle form submission with password
+                if (passwordInput) {
+                    const password = passwordInput.value;
+                    if (!password) {
+                        alert('Por favor, introduce una contraseña');
+                        return;
+                    }
+                    
+                    handleLogin(email, password);
+                }
+            });
+        }
     
+        // Función para manejar el formulario de inicio de sesión (traditional approach)
+        if (loginForm) {
+            loginForm.addEventListener('submit', async function (event) {
+                event.preventDefault();
+                console.log("Form submitted");
+        
+                const email = emailInput ? emailInput.value : '';
+                console.log("Email in form submit:", email);
+                
+                // Verificar si el campo de contraseña está visible
+                const passwordContainerStyle = passwordContainer ? 
+                    window.getComputedStyle(passwordContainer).display : 'none';
+                console.log("Password container style:", passwordContainerStyle);
+                
+                if (passwordContainerStyle === 'none') {
+                    // Validar que se haya ingresado un email
+                    if (!email) {
+                        alert('Por favor, introduce un email válido');
+                        return;
+                    }
+                    
+                    // Mostrar el campo de la contraseña
+                    console.log("Showing password field from form submit");
+                    if (emailInput) emailInput.style.display = 'none';
+                    if (passwordContainer) passwordContainer.style.display = 'block';
+                    return;
+                }
+            
+                // Obtener la contraseña
+                const password = passwordInput ? passwordInput.value : '';
+            
+                // Validar que se haya ingresado una contraseña
+                if (!password) {
+                    alert('Por favor, introduce una contraseña');
+                    return;
+                }
+        
+                handleLogin(email, password);
+            });
+        }
+        
+        // Separate login handling function
+        async function handleLogin(email: string, password: string) {
+            console.log("Handling login for:", email);
             try {
                 const response = await axios.post('http://localhost:5000/api/auth/iniciar-sesion', {
                     email,
@@ -104,12 +186,11 @@ import Layout from '../layouts/Layout-registro.astro';
                 else {
                     alert(response.data.message || 'Error en el inicio de sesión');
                 }
-
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error al conectarse al servidor');
             }
-        });
+        }
     </script>
 </Layout>
 
@@ -211,6 +292,7 @@ import Layout from '../layouts/Layout-registro.astro';
 
     input#password{
         width: 78%;
+        margin-top: 14px;
     }
 
     input:focus {
@@ -240,9 +322,9 @@ import Layout from '../layouts/Layout-registro.astro';
         position: absolute;
         display: flex;
         align-self: center;
-        width: 25px;
+        width: 40px;
         height: 25px;
-        right: 9px;
+        right: 1px;
         border-radius: 50px;
         cursor: pointer;
     }
@@ -252,23 +334,24 @@ import Layout from '../layouts/Layout-registro.astro';
         align-self: center;
         width: 25px;
         height: 25px;
-        right: 7px;
     }
 
-    button#iniciar{
-        position: relative;
-        width: 190px;
-        height: 20.57px;
+    a#iniciar{
         align-self: center;
         margin-top: 27px;
+        text-decoration: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 14px;
+        position: relative;
     }
 
     img#google{
-        width: 190px;
+        width: 210px;
     }
 
     .texto-abajo{
-        margin-top: 300px;
+        margin-top: 250px;
         text-align: center;
         position: relative;
         font-size: 13px;
