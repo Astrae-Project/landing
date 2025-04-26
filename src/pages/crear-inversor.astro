@@ -20,8 +20,8 @@ import Layout from '../layouts/Layout-registro.astro';
       </div>
       <!-- Paso 2: Ciudad y País -->
       <div id="step2" class="step" style="display: none;">
-        <input id="ciudad" type="text" name="ciudad" placeholder="Ciudad" required autocomplete="off">
-        <input id="pais" type="text" name="pais" placeholder="País" required autocomplete="off">
+        <input id="pais" type="text" name="pais" placeholder="País" required>
+        <input id="ciudad" type="text" name="ciudad" placeholder="Ciudad" required>
         <button id="next2" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
       </div>
       <!-- Paso 3: Perfil de inversión -->
@@ -88,7 +88,7 @@ import Layout from '../layouts/Layout-registro.astro';
     next1.addEventListener('click', function () {
       if (nombreInput.value) {
         step1.style.display = 'none';
-        step2.style.display = 'block';
+        step2.style.display = 'flex';
       } else {
         alert('Por favor, ingresa un nombre.');
       }
@@ -130,7 +130,9 @@ import Layout from '../layouts/Layout-registro.astro';
           nombre_inversor,
           perfil_inversion,
           ciudad,
-          pais
+          pais 
+        }, {
+          withCredentials: true
         });
 
         if (response.status === 201) {
@@ -143,34 +145,6 @@ import Layout from '../layouts/Layout-registro.astro';
         alert('Error al conectarse al servidor: ' + (error.response ? error.response.data : error.message));
       }
     });
-
-    // Autocompletado de Ciudad y País
-    const initializeAutocomplete = () => {
-      // Suponiendo que usas un API para el autocompletado
-      const countryInput = document.getElementById('pais');
-      const cityInput = document.getElementById('ciudad');
-
-      // Aquí iría tu lógica para obtener y mostrar las sugerencias para país y ciudad
-      // Por ejemplo, podrías utilizar una librería o realizar peticiones a un servicio externo
-      // Por simplicidad, esto es solo un esqueleto de la funcionalidad
-      const countries = ["España", "México", "Argentina", "Colombia", "Chile"];
-      const cities = ["Madrid", "Barcelona", "Valencia", "Buenos Aires", "Bogotá"];
-
-      // Autocompletado para el país
-      countryInput.addEventListener('input', () => {
-        // Filtrar los países basados en la entrada
-        // Mostrar las sugerencias en un dropdown o similar
-      });
-
-      // Autocompletado para la ciudad
-      cityInput.addEventListener('input', () => {
-        // Filtrar las ciudades basadas en la entrada
-        // Mostrar las sugerencias en un dropdown o similar
-      });
-    };
-
-    initializeAutocomplete();
-
   </script>
 </Layout>
 
@@ -224,7 +198,7 @@ import Layout from '../layouts/Layout-registro.astro';
     -webkit-background-clip: text;
     color: transparent;
     background-clip: text;
-    margin-top: 275px;
+    margin-top: 310px;
   }
 
   p#subtexto-principal{
@@ -234,8 +208,8 @@ import Layout from '../layouts/Layout-registro.astro';
     line-height: 24px;
     text-align: center;
     color: #9292ad;
-    margin-top: -19px;
-    margin-bottom: 21px;
+    margin-top: -15px;
+    margin-bottom: 15px;
   }
 
   form{
@@ -259,6 +233,10 @@ import Layout from '../layouts/Layout-registro.astro';
     color: rgb(255, 255, 255);
     caret-color: rgb(71, 159, 250);
     font-size: 14px;
+  }
+
+  input#ciudad, input#pais{
+    width: 40%;
   }
 
   .step{
@@ -353,7 +331,7 @@ import Layout from '../layouts/Layout-registro.astro';
     width: 25px;
     height: 25px;
     right: 20px;
-    top: 6px;
+    top: 9px;
     border-radius: 50px;
     cursor: pointer;
   }

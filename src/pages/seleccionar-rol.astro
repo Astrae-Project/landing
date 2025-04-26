@@ -49,8 +49,10 @@ import Layout from '../layouts/Layout-registro.astro';
         try {
             // Aquí se envía la solicitud al backend
             const response = await customAxios.post(`http://localhost:5000/api/auth/seleccionar-rol`, {
-            rol
-          });
+            rol}, 
+            {
+              withCredentials: true
+            });
            
             if (response.status === 200) {
               // Redirige según el perfil seleccionado

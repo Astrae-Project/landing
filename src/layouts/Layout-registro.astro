@@ -36,6 +36,20 @@ const { title } = Astro.props;
         font-style: normal;
         overflow: hidden;
     }
+
+    input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s !important;
+            -webkit-text-fill-color: #fff !important;
+            caret-color: #479FFA !important;
+            background-color: transparent !important;
+        }
+
+        input:-webkit-autofill::first-line {
+            color: #fff !important;
+        }
 </style>
 
 <!-- Script solo para páginas de login/registro -->

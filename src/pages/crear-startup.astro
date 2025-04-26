@@ -30,15 +30,25 @@ import Layout from '../layouts/Layout-registro.astro';
         <button id="next3" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
       </div>
 
+      <!-- Paso 4: Nº Plantilla -->
       <div id="step4" class="step" style="display: none;">
-        <input id="plantilla" type="number" name="plantilla" placeholder="Nº Plantilla" required>
+        <div class="number-input">
+          <button type="button" class="decrement">-</button>
+          <input id="plantilla" type="number" name="plantilla" placeholder="Nº Plantilla" required>
+          <button type="button" class="increment">+</button>
+        </div>
         <button id="next4" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
-      </div> 
+      </div>
 
+      <!-- Paso 5: Porcentaje -->
       <div id="step5" class="step" style="display: none;">
-        <input id="porcentaje" type="text" name="porcentaje" placeholder="Porcentaje" required>
+        <div class="number-input">
+          <button type="button" class="decrement">-</button>
+          <input id="porcentaje" type="number" name="porcentaje" placeholder="Ej: 20 (no vendido)" required min="0" max="100">
+          <button type="button" class="increment">+</button>
+        </div>
         <button id="next5" class="next" type="button"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
-      </div> 
+      </div>
 
       <div id="step6" class="financiation-container" style="display: none">
         <h1 id="titulo2">Ronda de Financiación</h1>
@@ -104,7 +114,6 @@ import Layout from '../layouts/Layout-registro.astro';
 
   <script>
     import axios from "axios";
-    import { jwtDecode } from "jwt-decode"; // Asegúrate de tener esta dependencia instalada
   
     const blurDiv = document.getElementById('blur');
     const startupForm = document.getElementById('startupForm');
@@ -130,7 +139,23 @@ import Layout from '../layouts/Layout-registro.astro';
     const porcentajeInput = document.getElementById('porcentaje');
   
     let financiation = '';
-  
+
+    document.querySelectorAll('.number-input').forEach(wrapper => {
+    const input = wrapper.querySelector('input');
+    const increment = wrapper.querySelector('.increment');
+    const decrement = wrapper.querySelector('.decrement');
+
+      increment.addEventListener('click', () => {
+        input.value = parseInt(input.value || 0) + 1;
+      });
+
+      decrement.addEventListener('click', () => {
+        if (parseInt(input.value) > 0) {
+          input.value = parseInt(input.value || 0) - 1;
+        }
+      });
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
       nombreInput.addEventListener('input', function() {
         if (nombreInput.value !== '') {
@@ -251,6 +276,8 @@ import Layout from '../layouts/Layout-registro.astro';
             plantilla,
             porcentaje,
             estado_financiacion
+        }, {
+          withCredentials: true
         });
 
         // Manejo de la respuesta
@@ -318,7 +345,7 @@ import Layout from '../layouts/Layout-registro.astro';
     -webkit-background-clip: text;
     color: transparent;
     background-clip: text;
-    margin-top: 275px;
+    margin-top: 310px;
   }
 
   p#subtexto-principal{
@@ -328,8 +355,8 @@ import Layout from '../layouts/Layout-registro.astro';
     line-height: 24px;
     text-align: center;
     color: #9292ad;
-    margin-top: -19px;
-    margin-bottom: 21px;
+    margin-top: -15px;
+    margin-bottom: 15px;
   }
 
   form{
@@ -353,6 +380,10 @@ import Layout from '../layouts/Layout-registro.astro';
     color: rgb(255, 255, 255);
     caret-color: rgb(71, 159, 250);
     font-size: 14px;
+  }
+
+  input#ciudad, input#pais{
+    width: 40%;
   }
 
   .step{
@@ -464,7 +495,7 @@ import Layout from '../layouts/Layout-registro.astro';
     width: 25px;
     height: 25px;
     right: 20px;
-    top: 6px;
+    top: 9px;
     border-radius: 50px;
     cursor: pointer;
   }
@@ -472,4 +503,48 @@ import Layout from '../layouts/Layout-registro.astro';
   lord-icon{
     position: relative;
   }
+
+  .number-input {
+  display: flex;
+  align-items: center;
+  width: 85%;
+  justify-content: space-between;
+  margin-top: 7px;
+}
+
+.number-input input {
+  width: 60%;
+  text-align: center;
+}
+
+.number-input .increment,
+.number-input .decrement {
+  background: rgba(255, 255, 255, 0.06);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 2px;
+  position: relative;
+}
+
+/* Para Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Para Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 </style>

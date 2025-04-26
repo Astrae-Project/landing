@@ -230,6 +230,8 @@ import Layout from '../layouts/Layout-registro.astro';
                     email,
                     username,
                     password
+                }, {
+                    withCredentials: true
                 });
 
                 if (response.status === 201) {
@@ -347,10 +349,6 @@ import Layout from '../layouts/Layout-registro.astro';
         height: 92%;
     }
 
-    input#password{
-        margin-top: 14px;
-    }
-
     input:focus {
         outline: none;
     }
@@ -407,7 +405,7 @@ import Layout from '../layouts/Layout-registro.astro';
     }
 
     .texto-abajo{
-        margin-top: 250px;
+        margin-top: 300px;
         text-align: center;
         position: relative;
         font-size: 13px;
