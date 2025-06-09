@@ -36,20 +36,12 @@ import Layout from '../layouts/Layout-registro.astro';
         const loginForm = document.getElementById('loginForm') as HTMLFormElement;
         const emailInput = document.getElementById('email') as HTMLInputElement;
         const passwordContainer = document.getElementById('password-container') as HTMLDivElement;
-        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const passwordInput = document.getElementById('password1') as HTMLInputElement;
         const blurElement = document.getElementById('blur') as HTMLDivElement;
         const togglePassword = document.getElementById('toggle-password') as HTMLSpanElement;
         const eyeIcon = document.getElementById('eye-icon') as HTMLImageElement;
         const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
 
-        // Check if elements were found
-        console.log("Form elements found:", {
-            loginForm: !!loginForm,
-            emailInput: !!emailInput,
-            passwordContainer: !!passwordContainer,
-            passwordInput: !!passwordInput,
-            submitBtn: !!submitBtn
-        });
 
         // Añadir evento para mostrar/ocultar contraseña
         if (togglePassword && passwordInput && eyeIcon) {

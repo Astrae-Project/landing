@@ -42,63 +42,21 @@ import Layout from '../layouts/Layout-registro.astro';
     <script>
         import axios from 'axios';
     
-        console.log("Registration script initializing...");
-    
-        const registerForm = document.getElementById('registerForm') as HTMLFormElement;
-        const emailInput = document.getElementById('email') as HTMLInputElement;
-        const usernameContainer = document.getElementById('username-container') as HTMLDivElement;
-        const usernameInput = document.getElementById('username') as HTMLInputElement;
-        const passwordContainer = document.getElementById('password-container') as HTMLDivElement;
-        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const registerForm = document.getElementById('registerForm');
+        const emailInput = document.getElementById('email');
+        const usernameContainer = document.getElementById('username-container');
+        const usernameInput = document.getElementById('username');
+        const passwordContainer = document.getElementById('password-container');
+        const passwordInput = document.getElementById('password');
         const blurElement = document.getElementById('blur') as HTMLDivElement;
-        const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-        const togglePassword = document.getElementById('toggle-password') as HTMLSpanElement;
-        const eyeIcon = document.getElementById('eye-icon') as HTMLImageElement;
-        
-        // Check if elements were found
-        console.log("Registration form elements found:", {
-            registerForm: !!registerForm,
-            emailInput: !!emailInput,
-            usernameContainer: !!usernameContainer,
-            usernameInput: !!usernameInput,
-            passwordContainer: !!passwordContainer,
-            passwordInput: !!passwordInput,
-            submitBtn: !!submitBtn
-        });
-        
-        // Add toggle password functionality
-        if (togglePassword && passwordInput && eyeIcon) {
-            togglePassword.addEventListener('click', () => {
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    eyeIcon.src = 'Imagenes/Registro/Ojo abierto.png';
-                } else {
-                    passwordInput.type = 'password';
-                    eyeIcon.src = 'Imagenes/Registro/Ojo cerrado.png';
-                }
-            });
-        }
 
-        // Función para reiniciar el formulario
+
         function resetForm() {
             if (emailInput) emailInput.value = '';
-            if (usernameInput) usernameInput.value = '';
             if (passwordInput) passwordInput.value = '';
-            if (usernameContainer) usernameContainer.style.display = 'none';
             if (passwordContainer) passwordContainer.style.display = 'none';
             if (emailInput) emailInput.style.display = 'block'; // Ensure email is visible
             if (blurElement) blurElement.classList.remove('blur-active');
-        }
-
-        // Event listener para el input de email
-        if (emailInput) {
-            emailInput.addEventListener('input', () => {
-                if (emailInput.value.length > 0 && blurElement) {
-                    blurElement.classList.add('blur-active');
-                } else if (blurElement) {
-                    blurElement.classList.remove('blur-active');
-                }
-            });
         }
 
         // Event listener para reiniciar al hacer clic fuera
@@ -108,146 +66,67 @@ import Layout from '../layouts/Layout-registro.astro';
                 resetForm();
             }
         });
+        
     
         // Función para mostrar solo el contenedor especificado
-        function showOnly(container: HTMLElement) {
-            if (usernameContainer) usernameContainer.style.display = 'none';
-            if (passwordContainer) passwordContainer.style.display = 'none';
-            if (emailInput) emailInput.style.display = 'none';
+        function showOnly(container) {
+            usernameContainer.style.display = 'none';
+            passwordContainer.style.display = 'none';
             container.style.display = 'block';
         }
-        
-        // Alternative approach using the button click
-        if (submitBtn) {
-            submitBtn.addEventListener('click', (event) => {
-                event.preventDefault();
-                console.log("Submit button clicked");
-                
-                const email = emailInput ? emailInput.value : '';
-                const password = passwordInput ? passwordInput.value : '';
-                const username = usernameInput ? usernameInput.value : '';
-                
-                console.log("Current input values:", { 
-                    email, 
-                    password: password ? '(set)' : '(empty)', 
-                    username 
-                });
-                
-                console.log("Container visibility:", {
-                    passwordContainer: passwordContainer ? window.getComputedStyle(passwordContainer).display : 'unknown',
-                    usernameContainer: usernameContainer ? window.getComputedStyle(usernameContainer).display : 'unknown'
-                });
-                
-                // Check what step we're at and proceed accordingly
-                
-                // Step 1: Email entered, show password field
-                if (
-                    email && 
-                    passwordContainer && 
-                    window.getComputedStyle(passwordContainer).display === 'none' &&
-                    usernameContainer && 
-                    window.getComputedStyle(usernameContainer).display === 'none'
-                ) {
-                    console.log("Moving to password step");
-                    showOnly(passwordContainer);
-                    return;
-                }
-                
-                // Step 2: Password entered, show username field
-                if (
-                    email && 
-                    password && 
-                    usernameContainer && 
-                    window.getComputedStyle(usernameContainer).display === 'none'
-                ) {
-                    console.log("Moving to username step");
-                    showOnly(usernameContainer);
-                    return;
-                }
-                
-                // Step 3: All fields completed, submit form
-                if (email && password && username) {
-                    console.log("All fields completed, submitting form");
-                    submitRegistration(email, password, username);
-                }
-            });
-        }
     
-        // Traditional form submission
-        if (registerForm) {
-            registerForm.addEventListener('submit', async function (event) {
-                event.preventDefault();
-                console.log("Form submitted");
-        
-                // Obtener el email
-                const email = emailInput ? emailInput.value : '';
-                console.log("Email value:", email);
-        
-                // Verificar si debe mostrarse el campo de contraseña
-                if (
-                    passwordContainer && 
-                    window.getComputedStyle(passwordContainer).display === 'none' && 
-                    email
-                ) {
-                    console.log("Showing password container from form submit");
-                    showOnly(passwordContainer);
-                    return;
-                }
-        
-                // Verificar si debe mostrarse el campo de nombre de usuario
-                if (
-                    usernameContainer && 
-                    window.getComputedStyle(usernameContainer).display === 'none' && 
-                    passwordInput && passwordInput.value
-                ) {
-                    console.log("Showing username container from form submit");
-                    showOnly(usernameContainer);
-                    return;
-                }
-        
-                // Obtener el nombre de usuario
-                const username = usernameInput ? usernameInput.value : '';
-                const password = passwordInput ? passwordInput.value : '';
-        
-                // Verificar si todos los campos están completos antes de enviar
-                if (
-                    usernameContainer && 
-                    window.getComputedStyle(usernameContainer).display === 'block' && 
-                    username && 
-                    password
-                ) {
-                    console.log("All fields completed from form submit");
-                    submitRegistration(email, password, username);
-                }
-            });
-        }
-        
-        // Function to handle registration submission
-        async function submitRegistration(email: string, password: string, username: string) {
-            try {
-                console.log("Submitting registration for:", email);
-                const response = await axios.post('http://localhost:5000/api/auth/registrar', {
-                    email,
-                    username,
-                    password
-                }, {
-                    withCredentials: true
-                });
-
-                if (response.status === 201) {
-                    console.log('Registro exitoso:', response.data);
-                    window.location.href = 'http://localhost:4321/seleccionar-rol';
-                } else {
-                    console.error('Error en el registro:', response.data);
-                    alert('Error en el registro, por favor intenta nuevamente.');
-                }
-            } catch (error) {
-                console.error('Error en la solicitud:', error);
-                alert('Error al conectarse al servidor');
+        registerForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+    
+            // Obtener el email
+            const email = emailInput.value;
+    
+            // Verificar si debe mostrarse el campo de contraseña
+            if (passwordContainer.style.display === 'none' && email) {
+                // Mostrar solo el contenedor de contraseña
+                showOnly(passwordContainer);
+                passwordInput.required = true;
+                return;
             }
-        }
-    </script>
     
+            // Verificar si debe mostrarse el campo de nombre de usuario
+            if (usernameContainer.style.display === 'none' && passwordInput.value) {
+                // Mostrar solo el contenedor de nombre de usuario
+                showOnly(usernameContainer);
+                usernameInput.required = true;
+                return;
+            }
+    
+            // Obtener el nombre de usuario
+            const username = usernameInput.value;
+    
+            // Verificar si todos los campos están completos antes de enviar
+            if (usernameContainer.style.display === 'block' && username && passwordInput.value) {
+                // Enviar los datos al servidor
+                try {
+                    const response = await axios.post('http://localhost:5000/api/auth/registrar', {
+                        email,
+                        username,
+                        password: passwordInput.value
+                    }, { 
+                        withCredentials: true,  // Habilitar el envío de cookies
+                    }
+                    );
+    
+                    if (response.status === 201) {
+                        console.log('Registro exitoso:', response.data);
+                        window.location.href = 'http://localhost:4321/seleccionar-rol';
+                    } else {
+                        console.error('Error en el registro:', response.data);
+                        alert('Error en el registro, por favor intenta nuevamente.');
+                    }
+                } catch (error) {
+                    console.error('Error en la solicitud:', error);
+                    alert('Error al conectarse al servidor');
+                }
+            }
+        });
+    </script>
 </Layout>
 
 <style>
