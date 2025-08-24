@@ -255,18 +255,6 @@ import Layout from '../layouts/Layout-registro.astro';
         const plantilla = plantillaInput.value;
         const porcentaje = porcentajeInput.value;
 
-        // Log de todos los valores
-        console.log('Valores enviados:', {
-            nombre_startup,
-            ciudad,
-            pais,
-            sector,
-            plantilla,
-            porcentaje,
-            estado_financiacion,
-            userId
-        });
-
         // Enviar la solicitud POST con axios
         const response = await axios.post(`http://localhost:5000/api/auth/crear-startup/${userId}`, {
             nombre_startup,

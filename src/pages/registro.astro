@@ -114,7 +114,6 @@ import Layout from '../layouts/Layout-registro.astro';
                     );
     
                     if (response.status === 201) {
-                        console.log('Registro exitoso:', response.data);
                         window.location.href = 'http://localhost:4321/seleccionar-rol';
                     } else {
                         console.error('Error en el registro:', response.data);
