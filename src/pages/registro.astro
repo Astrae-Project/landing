@@ -31,7 +31,7 @@ import Layout from '../layouts/Layout-registro.astro';
             <button id="submit-btn" type="submit"><img id="flecha" src="Imagenes/Registro/Flecha.svg"></button>
         </form>
 
-        <!--<a id="iniciar" href="https://dev-3cukw7bzrlcixy2o.us.auth0.com/authorize?response_type=code&client_id=IFvhehTi8BtAMwRD9QLXi0AKnNIjTraf&redirect_uri=http://localhost:5000/api/auth/callback&scope=openid%20profile%20email&connection=google-oauth2">
+        <!--<a id="iniciar" href="https://dev-3cukw7bzrlcixy2o.us.auth0.com/authorize?response_type=code&client_id=IFvhehTi8BtAMwRD9QLXi0AKnNIjTraf&redirect_uri=https://backend-l3s8.onrender.com/api/auth/callback&scope=openid%20profile%20email&connection=google-oauth2">
             <img id="google" src="Imagenes/Registro/Inicia sesion con google.svg" alt="Inicia sesión con Google">
         </a> -->
 
@@ -104,7 +104,7 @@ import Layout from '../layouts/Layout-registro.astro';
             if (usernameContainer.style.display === 'block' && username && passwordInput.value) {
                 // Enviar los datos al servidor
                 try {
-                    const response = await axios.post('http://localhost:5000/api/auth/registrar', {
+                    const response = await axios.post('https://backend-l3s8.onrender.com/api/auth/registrar', {
                         email,
                         username,
                         password: passwordInput.value
