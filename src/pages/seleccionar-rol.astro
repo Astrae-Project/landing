@@ -47,7 +47,7 @@ import Layout from '../layouts/Layout-registro.astro';
           
         try {
             // Aquí se envía la solicitud al backend
-            const response = await customAxios.post(`https://backend-l3s8.onrender.com/api/auth/seleccionar-rol`, {
+            const response = await customAxios.post(`https://api.astraesystem.com/api/auth/seleccionar-rol`, {
             rol}, 
             {
               withCredentials: true

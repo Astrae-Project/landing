@@ -126,7 +126,7 @@ import Layout from '../layouts/Layout-registro.astro';
       const pais = paisInput.value;
       
       try {
-        const response = await axios.post(`https://backend-l3s8.onrender.com/api/auth/crear-inversor/${userId}`, {
+        const response = await axios.post(`https://api.astraesystem.com/api/auth/crear-inversor/${userId}`, {
           nombre_inversor,
           perfil_inversion,
           ciudad,
@@ -136,7 +136,7 @@ import Layout from '../layouts/Layout-registro.astro';
         });
 
         if (response.status === 201) {
-          window.location.href = 'http://localhost:3000/';
+          window.location.href = 'https://app.astraesystem.com/';
         } else {
           alert('Hubo un problema al completar el registro.');
         }
