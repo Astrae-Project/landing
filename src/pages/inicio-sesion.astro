@@ -28,7 +28,7 @@ import Layout from '../layouts/Layout-registro.astro';
         <p class="texto-abajo"><span id="regular">¿No tienes cuenta todavía?</span><a href="/registro" id="texto-abajo">Regístrate</a></p>
     </body>
     <script>
-        import axios from 'axios';
+        import customAxios from '../services/api';
     
         // Debug info to console
     
@@ -154,7 +154,7 @@ import Layout from '../layouts/Layout-registro.astro';
         // Separate login handling function
         async function handleLogin(email: string, password: string) {
             try {
-                const response = await axios.post(
+                const response = await customAxios.post(
                     '/auth/iniciar-sesion',
                     { email, password },
                     { withCredentials: true } // 👈 Necesario para que se guarden las cookies
