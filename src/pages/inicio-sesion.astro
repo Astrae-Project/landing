@@ -1,5 +1,6 @@
 --- 
 import Layout from '../layouts/Layout-registro.astro'; 
+
 ---
 
 <Layout title="Plantilla">
@@ -28,8 +29,7 @@ import Layout from '../layouts/Layout-registro.astro';
         <p class="texto-abajo"><span id="regular">¿No tienes cuenta todavía?</span><a href="/registro" id="texto-abajo">Regístrate</a></p>
     </body>
     <script>
-        import customAxios from '../services/api';
-    
+        import customAxios from "../services/api.mjs";    
         // Debug info to console
     
         const loginForm = document.getElementById('loginForm') as HTMLFormElement;
