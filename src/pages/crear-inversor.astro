@@ -126,7 +126,7 @@ import Layout from '../layouts/Layout-registro.astro';
       const pais = paisInput.value;
       
       try {
-        const response = await axios.post(`https://api.astraesystem.com/api/auth/crear-inversor/${userId}`, {
+        const response = await axios.post(`/auth/crear-inversor/${userId}`, {
           nombre_inversor,
           perfil_inversion,
           ciudad,

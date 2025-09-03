@@ -256,7 +256,7 @@ import Layout from '../layouts/Layout-registro.astro';
         const porcentaje = porcentajeInput.value;
 
         // Enviar la solicitud POST con axios
-        const response = await axios.post(`https://api.astraesystem.com/api/auth/crear-startup/${userId}`, {
+        const response = await axios.post(`/auth/crear-startup/${userId}`, {
             nombre_startup,
             ciudad,
             pais,

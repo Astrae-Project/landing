@@ -204,7 +204,7 @@ import Layout from '../layouts/Layout-registro.astro';
             };
 
             try {
-                const response = await fetch('https://api.astraesystem.com/api/waitlist', {
+                const response = await fetch('/waitlist', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
