@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const baseURL = 'https://api.astraesystem.com/api';
 
 // Crear instancia de axios
 const customAxios = axios.create({
