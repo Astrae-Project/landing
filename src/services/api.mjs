@@ -1,10 +1,6 @@
 import axios from "axios";
 
-// Selección dinámica de la URL según entorno
-const baseURL =
-  window.location.hostname === "astraesystem.com"
-    ? "https://api.astraesystem.com/api"
-    : "http://localhost:5000/api";
+const baseURL = process.env.NEXT_PUBLIC_API_BASE;
 
 // Crear instancia de axios
 const customAxios = axios.create({
