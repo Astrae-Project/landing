@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Selección dinámica de la URL según entorno
 const baseURL =
-  window.location.hostname === "app.astraesystem.com"
+  window.location.hostname === "astraesystem.com"
     ? "https://api.astraesystem.com/api"
     : "http://localhost:5000/api";
 
